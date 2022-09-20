@@ -1,0 +1,20 @@
+<div [ngClass]="['main', isSearching ? 'main_expanded' : 'main_normal' ]"  #mainPanel>
+    
+    <div class="topbar">
+
+        <div [ngClass]="['logo_container', isSearching ? 'logo_container_hide' : '' ]">
+            <div class="logo_img" *ngIf="!isSearching">aaaaa</div>
+        </div>
+
+
+        <div class="search">
+            <input (click)="expand()" type="text" placeholder="Wyszukaj...">
+        </div>
+        <div class="buttons">
+            <button>Załóż konto</button>
+            <button>Zaloguj się</button>
+        </div>
+    </div>
+
+    <div *ngIf="isSearching" class="search_hints_container"></div>
+</div>
