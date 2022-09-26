@@ -1,0 +1,32 @@
+.main {
+  background-color: var(--background-color);
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+h1 {
+  text-align: center;
+  line-height: 1;
+}
+
+.content {
+  max-width: 550px;
+  width: 40%;
+}
+
+.form {
+  flex-direction: column;
+  row-gap: 10px;
+  display: flex;
+}
+
+input {
+  height: 20px;
+  font-size: 1.5em;
+}
+
+.error_message {
+  text-align: center;
+  color: red;
+}

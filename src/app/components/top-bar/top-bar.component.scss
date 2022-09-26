@@ -3,6 +3,10 @@
   width: 100%;
   background-color: var(--main-color);
   padding: 0px 20px;
+
+  -webkit-box-shadow: 0px 5px 10px -6px rgba(66, 68, 90, 1);
+  -moz-box-shadow: 0px 5px 10px -6px rgba(66, 68, 90, 1);
+  box-shadow: 0px 5px 10px -6px rgba(66, 68, 90, 1);
 }
 
 .main_expanded {
@@ -69,7 +73,6 @@
   margin: 20px;
   width: auto;
   height: 200px;
-  background-color: var(--main-color-light);
   animation: fadein var(--delay);
   animation-fill-mode: forwards;
 
@@ -83,4 +86,12 @@
   100% {
     opacity: 1;
   }
+}
+
+.account-button {
+  width: 60px;
+  height: 60px;
+  margin: 0;
+  border-radius: 30px;
+  border: 2px solid #bbb;
 }
