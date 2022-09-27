@@ -19,13 +19,26 @@
         placeholder="Wyszukaj..."
       />
     </div>
+
+    <div class="add">
+      <button
+        class="add_button"
+        mat-raised-button
+        color="primary"
+        routerLink="upload"
+      >
+        Dodaj pracę ➜
+      </button>
+    </div>
+
     <div class="account">
       <div *ngIf="isLogged">
         <button
-          class="account-button"
+          class="account_button logged"
           mat-button
           [matMenuTriggerFor]="menu_logged"
         >
+          <span>Witaj, {{ username }}</span>
           <img src="assets/user-solid.svg" alt="user" width="25" />
         </button>
 
@@ -39,7 +52,7 @@
 
       <div *ngIf="!isLogged">
         <button
-          class="account-button"
+          class="account_button not_logged"
           mat-button
           [matMenuTriggerFor]="menu_not_logged"
         >

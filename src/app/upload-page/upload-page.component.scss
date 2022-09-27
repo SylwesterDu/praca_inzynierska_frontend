@@ -1,0 +1,54 @@
+.main {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  padding-top: 50px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.card_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  row-gap: 40px;
+  justify-items: center;
+}
+
+.card {
+  min-width: 40%;
+  min-height: 300px;
+  width: 400px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.song {
+  background-image: url("/assets/upload_song_image.png");
+}
+
+.literature {
+  background-image: url("/assets/upload_literature_image.png");
+}
+
+.photography {
+  background-image: url("/assets/upload_photography_image.png");
+}
+
+.other {
+  background-image: url("/assets/upload_other_image.png");
+}
+
+.button {
+  position: absolute;
+  bottom: 60px;
+  min-width: 200px;
+  height: 50px;
+  font-size: var(--font-size);
+}

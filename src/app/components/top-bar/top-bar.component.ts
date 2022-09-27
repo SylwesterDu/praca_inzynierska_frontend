@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'app-top-bar',
@@ -17,6 +18,7 @@ export class TopBarComponent implements OnInit {
   isSearching: boolean = false;
   isLogged?: boolean;
   navigationSubscription;
+  username: string = 'testowa nazwa';
 
   @ViewChild('mainPanel')
   mainPanel!: ElementRef<HTMLDivElement>;
@@ -24,7 +26,8 @@ export class TopBarComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {
     this.renderer.listen('window', 'click', (e: Event) => {
       if (
@@ -38,7 +41,6 @@ export class TopBarComponent implements OnInit {
     });
 
     this.navigationSubscription = this.router.events.subscribe((e: any) => {
-      // If it is a NavigationEnd event re-initalise the component
       if (e instanceof NavigationEnd) {
         this.isLogged = this.authService.isLogged();
       }
@@ -48,7 +50,10 @@ export class TopBarComponent implements OnInit {
     console.log(this.isLogged);
   }
 
-  ngOnInit(): void {}
+  async ngOnInit(): Promise<void> {
+    let userData = await this.userService.getUserData();
+    // this.username = userData.username;
+  }
 
   expand() {
     this.isSearching = true;

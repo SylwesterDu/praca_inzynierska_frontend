@@ -36,7 +36,9 @@ $art_app-theme: mat.define-light-theme(
 
 :root {
   --delay: 400ms;
-  --background-color: #eee;
+  --background-color: whitesmoke;
+  --border-color: #ddd;
+  --font-size: 1.4em;
 
   * {
     margin: 0;

@@ -13,9 +13,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatDividerModule } from '@angular/material/divider';
 import { RegisterPageComponent } from './components/register-page/register-page.component';
+import { AuthInterceptor } from './services/auth.service';
+import { UploadPageComponent } from './upload-page/upload-page.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { RegisterPageComponent } from './components/register-page/register-page.
     TopBarComponent,
     LoginPageComponent,
     RegisterPageComponent,
+    UploadPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,9 @@ import { RegisterPageComponent } from './components/register-page/register-page.
     MatIconModule,
     MatDividerModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
