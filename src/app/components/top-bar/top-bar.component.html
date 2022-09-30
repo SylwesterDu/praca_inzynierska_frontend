@@ -22,10 +22,11 @@
 
     <div class="add">
       <button
-        class="add_button"
         mat-raised-button
+        *ngIf="isLogged"
+        class="add_button"
         color="primary"
-        routerLink="upload"
+        routerLink="/upload"
       >
         Dodaj pracę ➜
       </button>
@@ -43,7 +44,7 @@
         </button>
 
         <mat-menu #menu_logged xPosition="before">
-          <button mat-menu-item>Moje konto</button>
+          <button mat-menu-item routerLink="/my-account">Mój profil</button>
           <button mat-menu-item>Ustawienia</button>
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="logout()">Wyloguj</button>

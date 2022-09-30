@@ -47,7 +47,6 @@ export class TopBarComponent implements OnInit {
     });
 
     this.isLogged = this.authService.isLogged();
-    console.log(this.isLogged);
   }
 
   async ngOnInit(): Promise<void> {

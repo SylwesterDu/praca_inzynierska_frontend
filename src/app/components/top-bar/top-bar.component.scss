@@ -17,12 +17,12 @@
 }
 
 .main_normal {
-  height: 70px;
+  height: 60px;
 }
 
 .topbar {
   width: 100%;
-  height: 70px;
+  height: 60px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -98,7 +98,7 @@
 // }
 
 .account_button {
-  height: 60px;
+  height: 50px;
   border-radius: 30px;
   border: 2px solid #bbb;
 }
@@ -124,7 +124,7 @@
 }
 
 .add_button {
-  height: 55px;
+  height: 40px;
   width: 170px;
   font-size: var(--font-size);
 }

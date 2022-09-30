@@ -1,26 +1,128 @@
+<app-top-bar></app-top-bar>
 <div class="main">
-  <h1>Co chcesz dodać?</h1>
+  <div class="content">
+    <mat-horizontal-stepper [linear]="false" #stepper animationDuration="300">
+      <mat-step [stepControl]="titleAndDescriptionFormGroup">
+        <!-- Opis -->
+        <form [formGroup]="titleAndDescriptionFormGroup">
+          <ng-template matStepLabel>Wprowadź tytuł i opis</ng-template>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Tytuł"
+              formControlName="title"
+              required
+            />
+          </mat-form-field>
 
-  <div class="card_container">
-    <mat-card class="card song">
-      <button class="button" mat-raised-button color="primary">
-        Dodaj utwór muzyczny
-      </button>
-    </mat-card>
-    <mat-card class="card literature">
-      <button class="button" mat-raised-button color="primary">
-        Dodaj utwór literacki
-      </button>
-    </mat-card>
-    <mat-card class="card photography">
-      <button class="button" mat-raised-button color="primary">
-        Dodaj fotografię
-      </button>
-    </mat-card>
-    <mat-card class="card other">
-      <button class="button" mat-raised-button color="primary">
-        Dodaj inne dzieło
-      </button>
-    </mat-card>
+          <mat-form-field>
+            <mat-label>Wprowadź opis</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="1"
+              cdkAutosizeMaxRows="5"
+            ></textarea>
+          </mat-form-field>
+          <div>
+            <button mat-button color="primary" matStepperNext>Dalej</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="typeAndCategoryFormGroup">
+        <!-- Kategoria i gatunek  -->
+        <form [formGroup]="typeAndCategoryFormGroup">
+          <ng-template matStepLabel>Wybierz typ</ng-template>
+          <mat-form-field appearance="fill">
+            <mat-label>Co chcesz wstawić?</mat-label>
+            <mat-select
+              formControlName="type"
+              required
+              (selectionChange)="showCategorySelect()"
+              [(value)]="selectedType"
+            >
+              <mat-option value="music">Muzyka</mat-option>
+              <mat-option value="literature">Literatura</mat-option>
+              <mat-option value="photography">Fotografia</mat-option>
+              <mat-option value="other">Inne</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="isTypeSelected" appearance="fill">
+            <mat-label>Wybierz gatunek</mat-label>
+            <mat-select formControlName="category" required>
+              <mat-option
+                *ngFor="let genre of genres.get(selectedType)"
+                [value]="genre"
+              >
+                {{ genre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div>
+            <button mat-button color="primary" matStepperPrevious>Wróć</button>
+            <button mat-button color="primary" matStepperNext>Dalej</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Wybierz tagi</ng-template>
+
+        <!-- Tagi -->
+        <p>Wybierz tagi, dzięki którym będzie można wyszukać Twoje dzieło.</p>
+
+        <form [formGroup]="tagsFormGroup">
+          <mat-form-field appearance="fill">
+            <mat-label>Lista tagów</mat-label>
+            <mat-chip-list #chipList aria-label="Fruit selection">
+              <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
+                #{{ tag }}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+              <input
+                placeholder="Wpisz tag i naciśnij Enter"
+                #TagInput
+                [formControl]="tagsFormControl"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="add($event)"
+              />
+            </mat-chip-list>
+          </mat-form-field>
+        </form>
+
+        <div>
+          <button mat-button color="primary" matStepperPrevious>Wróć</button>
+          <button mat-button color="primary" matStepperNext>Dalej</button>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Wybierz plik</ng-template>
+        <form>
+          <button mat-stroked-button color="primary">
+            Kliknij, by wybrać plik
+          </button>
+        </form>
+        <div>
+          <button mat-button color="primary" matStepperPrevious>Wróć</button>
+          <button mat-button color="primary" matStepperNext>Dalej</button>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Opublikuj</ng-template>
+        Twoje dzieło jest gotowe do publikacji.
+        <div>
+          <form>
+            <button mat-button color="primary">Opublikuj</button>
+          </form>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
   </div>
 </div>
