@@ -2,10 +2,17 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import {
+  MatChip,
+  MatChipInputEvent,
+  MatChipSelectionChange,
+} from '@angular/material/chips';
+
+import {
+  PublishArtworkRequest,
+  UploadProcess,
+  UploadService,
+} from '../services/upload.service';
 
 @Component({
   selector: 'app-upload-page',
@@ -13,8 +20,13 @@ import { map, startWith } from 'rxjs/operators';
   styleUrls: ['./upload-page.component.scss'],
 })
 export class UploadPageComponent implements OnInit {
-  separatorKeysCodes: number[] = [ENTER, COMMA];
+  uploadProcessId: string = '';
 
+  files: File[] = [];
+
+  selectedGenres: string[] = [];
+
+  separatorKeysCodes: number[] = [ENTER, COMMA];
   selectedType: string = '';
   isTypeSelected: boolean = false;
   genres: Map<string, string[]> = new Map<string, string[]>();
@@ -39,7 +51,10 @@ export class UploadPageComponent implements OnInit {
   fileFormGroup: FormGroup = this.formBuilder.group({ file: '' });
 
   tagsFormControl: FormControl = new FormControl('');
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private uploadService: UploadService
+  ) {}
 
   showCategorySelect(): void {
     this.isTypeSelected = true;
@@ -80,6 +95,8 @@ export class UploadPageComponent implements OnInit {
       'Origami',
       'Inne',
     ]);
+
+    this.beginUploadProcess();
   }
 
   remove(tag: string) {
@@ -102,8 +119,57 @@ export class UploadPageComponent implements OnInit {
     console.log(this.tags);
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.tags.push(event.option.viewValue);
-    this.tagInput!.nativeElement.value = '';
+  private async beginUploadProcess() {
+    let process: UploadProcess = await this.uploadService.beginUploadProcess();
+    console.log(process.id);
+    this.uploadProcessId = process.id;
+  }
+
+  async addFiles($event: Event) {
+    const element = $event.currentTarget as HTMLInputElement;
+    const files: FileList | null = element.files;
+    if (files === null) return;
+    const filesArray = Array.from(files!);
+    this.files.push(...filesArray);
+
+    for (let file of filesArray) {
+      let result: boolean = await this.uploadService.uploadFile(
+        file,
+        this.uploadProcessId
+      );
+    }
+  }
+
+  async publishArtwork() {
+    const publishArtworkRequest: PublishArtworkRequest = {
+      title: this.titleAndDescriptionFormGroup.value['title'],
+      artType: this.typeToNumber(this.typeAndCategoryFormGroup.value['type']),
+      genres: this.selectedGenres,
+      tags: this.tags,
+    };
+    let success: boolean = await this.uploadService.publishArtwork(
+      this.uploadProcessId,
+      publishArtworkRequest
+    );
+  }
+
+  private typeToNumber(type: string): number {
+    if (type === 'music') return 0;
+    if (type === 'literature') return 1;
+    if (type === 'photography') return 2;
+    return 3;
+  }
+
+  setSelected(chip: MatChip) {
+    const value = chip.value;
+    if (chip.selected) {
+      chip.deselect();
+      let index = this.selectedGenres.indexOf(value);
+      this.selectedGenres.splice(index, 1);
+
+      return;
+    }
+    chip.select();
+    this.selectedGenres.push(value);
   }
 }

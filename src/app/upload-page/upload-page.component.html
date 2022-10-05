@@ -49,16 +49,26 @@
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field *ngIf="isTypeSelected" appearance="fill">
+          <mat-form-field *ngIf="isTypeSelected" appearance="outline">
             <mat-label>Wybierz gatunek</mat-label>
-            <mat-select formControlName="category" required>
+            <!-- <mat-select formControlName="category" required>
               <mat-option
                 *ngFor="let genre of genres.get(selectedType)"
                 [value]="genre"
               >
-                {{ genre }}
+                {{ genre }} 
               </mat-option>
-            </mat-select>
+            </mat-select> -->
+            <mat-chip-list multiple>
+              <mat-chip
+                *ngFor="let genre of genres.get(selectedType)"
+                #chip="matChip"
+                (click)="setSelected(chip)"
+                selectable="selectable"
+                [color]="chip.selected ? 'accent' : 'primary'"
+                >{{ genre }}</mat-chip
+              >
+            </mat-chip-list>
           </mat-form-field>
 
           <div>
@@ -104,9 +114,27 @@
       <mat-step>
         <ng-template matStepLabel>Wybierz plik</ng-template>
         <form>
-          <button mat-stroked-button color="primary">
-            Kliknij, by wybrać plik
+          <ol>
+            <li *ngFor="let file of files">{{ file.name }}</li>
+          </ol>
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="fileInput.click()"
+          >
+            Kliknij, by wybrać plik{{
+              typeAndCategoryFormGroup.value["type"] !== "music" ? "i" : ""
+            }}
           </button>
+          <input
+            [multiple]="typeAndCategoryFormGroup.value['type'] !== 'music'"
+            #fileInput
+            type="file"
+            name="file"
+            id="file"
+            style="display: none"
+            (change)="addFiles($event)"
+          />
         </form>
         <div>
           <button mat-button color="primary" matStepperPrevious>Wróć</button>
@@ -119,7 +147,9 @@
         Twoje dzieło jest gotowe do publikacji.
         <div>
           <form>
-            <button mat-button color="primary">Opublikuj</button>
+            <button mat-button color="primary" (click)="publishArtwork()">
+              Opublikuj
+            </button>
           </form>
         </div>
       </mat-step>
