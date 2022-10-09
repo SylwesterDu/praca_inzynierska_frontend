@@ -7,6 +7,7 @@ import {
   MatChipInputEvent,
   MatChipSelectionChange,
 } from '@angular/material/chips';
+import { Router } from '@angular/router';
 
 import {
   PublishArtworkRequest,
@@ -53,7 +54,8 @@ export class UploadPageComponent implements OnInit {
   tagsFormControl: FormControl = new FormControl('');
   constructor(
     private formBuilder: FormBuilder,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private router: Router
   ) {}
 
   showCategorySelect(): void {
@@ -151,6 +153,10 @@ export class UploadPageComponent implements OnInit {
       this.uploadProcessId,
       publishArtworkRequest
     );
+
+    if (success) {
+      this.router.navigateByUrl('/my-account');
+    }
   }
 
   private typeToNumber(type: string): number {

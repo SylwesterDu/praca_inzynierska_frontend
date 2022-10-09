@@ -1,1 +1,24 @@
-<p>my-artworks works!</p>
+<div class="content">
+  <a
+    *ngFor="let artwork of artworks"
+    class="artwork"
+    [routerLink]="'/artwork/' + artwork.id"
+  >
+    <mat-card>
+      <div class="photo"></div>
+      <h2 class="title">
+        {{ artwork.title }}
+      </h2>
+      <div class="votes">
+        <span>
+          <mat-icon class="up_votes">thumb_up</mat-icon> {{ artwork.upVotes }}
+        </span>
+        <span>
+          <mat-icon class="down_votes">thumb_down</mat-icon>
+          {{ artwork.upVotes }}
+        </span>
+      </div>
+      <p class="views">{{ artwork.views }} wyświetleń</p>
+    </mat-card>
+  </a>
+</div>

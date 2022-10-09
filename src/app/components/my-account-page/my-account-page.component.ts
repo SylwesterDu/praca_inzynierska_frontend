@@ -13,7 +13,7 @@ enum View {
   styleUrls: ['./my-account-page.component.scss'],
 })
 export class MyAccountPageComponent implements OnInit {
-  currentView: View = View.Main;
+  currentView: View = View.MyArtworks;
   view = View;
   constructor() {}
 
