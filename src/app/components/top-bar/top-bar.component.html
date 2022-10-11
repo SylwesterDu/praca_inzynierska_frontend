@@ -3,46 +3,45 @@
   #mainPanel
 >
   <div class="topbar">
-    <div
-      [ngClass]="['logo_container', isSearching ? 'logo_container_hide' : '']"
-    >
-      <div class="logo_img" *ngIf="!isSearching">
-        <img src="assets/logo_placeholder.svg" alt="logo" width="45" />
-      </div>
+    <div class="logo_img">
+      <h1 style="color: white">logo</h1>
     </div>
 
     <div class="search">
-      <input
-        mat-input
-        (click)="expand()"
-        type="text"
-        placeholder="Wyszukaj..."
-      />
+      <form>
+        <mat-form-field class="search_input" (click)="expand()">
+          <input type="search" matInput />
+          <mat-icon matSuffix class="search_icon" color="primary"
+            >search</mat-icon
+          >
+        </mat-form-field>
+      </form>
     </div>
 
-    <div class="add">
-      <button
-        mat-raised-button
-        *ngIf="isLogged"
-        class="add_button"
-        color="primary"
-        routerLink="/upload"
-      >
-        Dodaj pracę ➜
-      </button>
-    </div>
-
-    <div class="account">
-      <div *ngIf="isLogged">
+    <div class="right_buttons">
+      <div class="add">
         <button
-          class="account_button logged"
-          mat-button
-          [matMenuTriggerFor]="menu_logged"
+          mat-raised-button
+          *ngIf="isLogged"
+          class="add_button"
+          color="primary"
+          routerLink="/upload"
         >
-          <span>Witaj, {{ username }}</span>
-          <img src="assets/user-solid.svg" alt="user" width="25" />
+          Dodaj pracę ➜
         </button>
+      </div>
 
+      <div class="account">
+        <div *ngIf="isLogged">
+          <button
+            class="account_button logged"
+            mat-raised-button
+            [matMenuTriggerFor]="menu_logged"
+          >
+            <span class="hello_message">Witaj, {{ username }}</span>
+            <mat-icon class="account_icon">account_circle</mat-icon>
+          </button>
+        </div>
         <mat-menu #menu_logged xPosition="before">
           <button mat-menu-item routerLink="/my-account">Mój profil</button>
           <button mat-menu-item>Ustawienia</button>
@@ -54,10 +53,9 @@
       <div *ngIf="!isLogged">
         <button
           class="account_button not_logged"
-          mat-button
           [matMenuTriggerFor]="menu_not_logged"
         >
-          <img src="assets/user-solid.svg" alt="user" width="25" />
+          <mat-icon class="account_icon">account_circle</mat-icon>
         </button>
 
         <mat-menu #menu_not_logged xPosition="before">

@@ -1,7 +1,7 @@
 .main {
   transition-duration: var(--delay);
   width: 100%;
-  background-color: white;
+  background-color: #202028;
   padding: 0px 20px;
 
   -webkit-box-shadow: 0px 5px 10px -6px rgba(66, 68, 90, 1);
@@ -30,38 +30,28 @@
   align-items: center;
 }
 
-.search {
-  margin-left: 20px;
-  width: 40%;
-  min-width: 300px;
-  height: 50px;
-  // border-radius: 25px;
-  border: 2px solid var(--border-color);
-  display: flex;
-  align-items: center;
-  width: 40%;
+.search_input {
+  background-color: transparent;
+  outline: none;
+  text-decoration: none;
+  padding-left: 18px;
+  padding-right: 18px;
+  color: var(--text-color);
+  background-color: var(--input-background);
+  width: 600px;
+  height: 40px;
+}
 
-  input {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    padding-left: 18px;
-    font-size: 1.3em;
-    width: 100%;
-  }
+mat-form-field {
+  width: 100%;
+}
 
-  ::placeholder {
-    color: var(--accent-color);
-    opacity: 0.4;
-  }
+.search_icon {
+  line-height: 1;
+}
 
-  :-ms-input-placeholder {
-    color: red;
-  }
-
-  ::-ms-input-placeholder {
-    color: red;
-  }
+::ng-deep .mat-form-field-underline {
+  display: none;
 }
 
 .logo_container {
@@ -93,18 +83,18 @@
   }
 }
 
-// .account {
-//   margin-left: auto;
-// }
-
 .account_button {
-  height: 50px;
   border-radius: 30px;
-  border: 2px solid #bbb;
+  background-color: var(--button-light);
+  border: 2px solid #505050;
+  color: var(--text-color);
 }
 
 .not_logged {
-  width: 60px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
 }
 
 .logged {
@@ -118,13 +108,17 @@
   }
 }
 
+.right_buttons {
+  display: flex;
+  flex-direction: row;
+}
+
 .add {
-  margin-left: auto;
   margin-right: 30px;
 }
 
 .add_button {
-  height: 40px;
-  width: 170px;
+  height: 35px;
+  width: 150px;
   font-size: var(--font-size);
 }
