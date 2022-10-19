@@ -1,0 +1,58 @@
+.main {
+  width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  padding-top: 70px;
+}
+
+.player_wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.player {
+  height: 60vh;
+  min-height: 400px;
+  width: 600px;
+  min-width: 60%;
+  flex: 1;
+}
+
+.description_and_rating {
+  flex: 1;
+  min-width: 300px;
+  min-height: min-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.description {
+  flex: 1;
+}
+
+.rating {
+  height: 50px;
+  font-size: 24px;
+  padding-left: 20px;
+  font-weight: 300;
+}
+
+.upVote_percentage {
+  font-size: 0.7em;
+  color: #aaa;
+}
+
+mat-icon {
+  font-size: 27px;
+  cursor: pointer;
+}
+
+.more_artworks {
+  width: 100%;
+  height: min-content;
+}
+
+div {
+  border: 1px dotted red;
+}

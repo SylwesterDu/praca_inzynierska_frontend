@@ -31,8 +31,7 @@
 }
 
 .search_input {
-  background-color: transparent;
-  outline: none;
+  outline: 1px solid #444;
   text-decoration: none;
   padding-left: 18px;
   padding-right: 18px;
@@ -85,9 +84,6 @@ mat-form-field {
 
 .account_button {
   border-radius: 30px;
-  background-color: var(--button-light);
-  border: 2px solid #505050;
-  color: var(--text-color);
 }
 
 .not_logged {

@@ -1,0 +1,55 @@
+a {
+  all: unset;
+}
+
+.artwork {
+  width: 200px;
+  min-height: 240px;
+  padding: 5px;
+  position: relative;
+  cursor: pointer;
+}
+
+.photo {
+  width: 100%;
+  aspect-ratio: 16/12;
+  background-color: aquamarine;
+}
+
+.title {
+  line-height: 1;
+  padding: 0;
+  margin: 5px 0px;
+}
+
+.votes {
+  line-height: 1;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  font-size: 20px;
+  margin: 5px 0px 10px 0px;
+}
+
+.up_votes {
+  color: green;
+  font-size: 21px;
+}
+
+.down_votes {
+  color: red;
+  font-size: 21px;
+}
+
+.views {
+  color: grey;
+  position: absolute;
+  bottom: 5px;
+}

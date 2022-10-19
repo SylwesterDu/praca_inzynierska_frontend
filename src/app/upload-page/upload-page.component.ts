@@ -145,6 +145,7 @@ export class UploadPageComponent implements OnInit {
   async publishArtwork() {
     const publishArtworkRequest: PublishArtworkRequest = {
       title: this.titleAndDescriptionFormGroup.value['title'],
+      description: this.titleAndDescriptionFormGroup.value['description'],
       artType: this.typeToNumber(this.typeAndCategoryFormGroup.value['type']),
       genres: this.selectedGenres,
       tags: this.tags,

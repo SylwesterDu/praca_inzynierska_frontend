@@ -1,17 +1,16 @@
 .main {
-  width: 100%;
-  min-height: 100vh;
-  background-color: var(--background-color);
   padding-top: 70px;
+  // background-color: red;
+  height: 100vh;
 }
 
 .content {
   padding: 40px;
 }
 
-label {
-  margin-right: 4px;
-  font-size: var(--font-size);
+mat-horizontal-stepper {
+  height: 400px;
+  position: relative;
 }
 
 form {
@@ -20,7 +19,6 @@ form {
   width: 50%;
 }
 
-mat-horizontal-stepper {
-  background-color: var(--background-color);
-  min-width: 500px;
+.text_input {
+  background-color: rgba($color: #777, $alpha: 0.2);
 }

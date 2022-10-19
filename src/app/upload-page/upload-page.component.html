@@ -3,9 +3,10 @@
   <div class="content">
     <mat-horizontal-stepper [linear]="false" #stepper animationDuration="300">
       <mat-step [stepControl]="titleAndDescriptionFormGroup">
-        <!-- Opis -->
         <form [formGroup]="titleAndDescriptionFormGroup">
-          <ng-template matStepLabel>Wprowadź tytuł i opis</ng-template>
+          <ng-template matStepLabel>
+            <span class="step_label"> Wprowadź tytuł i opis </span>
+          </ng-template>
           <mat-form-field>
             <input
               matInput
@@ -20,6 +21,7 @@
             <textarea
               matInput
               cdkTextareaAutosize
+              formControlName="description"
               #autosize="cdkTextareaAutosize"
               cdkAutosizeMinRows="1"
               cdkAutosizeMaxRows="5"
@@ -31,9 +33,10 @@
         </form>
       </mat-step>
       <mat-step [stepControl]="typeAndCategoryFormGroup">
-        <!-- Kategoria i gatunek  -->
         <form [formGroup]="typeAndCategoryFormGroup">
-          <ng-template matStepLabel>Wybierz typ</ng-template>
+          <ng-template matStepLabel>
+            <span class="step_label">Wybierz typ</span>
+          </ng-template>
           <mat-form-field appearance="fill">
             <mat-label>Co chcesz wstawić?</mat-label>
             <mat-select
@@ -50,15 +53,9 @@
           </mat-form-field>
 
           <mat-form-field *ngIf="isTypeSelected" appearance="outline">
-            <mat-label>Wybierz gatunek</mat-label>
-            <!-- <mat-select formControlName="category" required>
-              <mat-option
-                *ngFor="let genre of genres.get(selectedType)"
-                [value]="genre"
-              >
-                {{ genre }} 
-              </mat-option>
-            </mat-select> -->
+            <mat-label>
+              <span class="step_label"> Wybierz gatunek</span>
+            </mat-label>
             <mat-chip-list multiple>
               <mat-chip
                 *ngFor="let genre of genres.get(selectedType)"
@@ -78,9 +75,10 @@
         </form>
       </mat-step>
       <mat-step>
-        <ng-template matStepLabel>Wybierz tagi</ng-template>
+        <ng-template matStepLabel
+          ><span class="step_label"> Wybierz tagi</span>
+        </ng-template>
 
-        <!-- Tagi -->
         <p>Wybierz tagi, dzięki którym będzie można wyszukać Twoje dzieło.</p>
 
         <form [formGroup]="tagsFormGroup">
@@ -112,7 +110,9 @@
       </mat-step>
 
       <mat-step>
-        <ng-template matStepLabel>Wybierz plik</ng-template>
+        <ng-template matStepLabel
+          ><span class="step_label"> Wybierz plik</span>
+        </ng-template>
         <form>
           <ol>
             <li *ngFor="let file of files">{{ file.name }}</li>
@@ -143,7 +143,9 @@
       </mat-step>
 
       <mat-step>
-        <ng-template matStepLabel>Opublikuj</ng-template>
+        <ng-template matStepLabel>
+          <span class="step_label"> Opublikuj</span>
+        </ng-template>
         Twoje dzieło jest gotowe do publikacji.
         <div>
           <form>

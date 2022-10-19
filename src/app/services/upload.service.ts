@@ -10,6 +10,7 @@ export interface UploadProcess {
 
 export interface PublishArtworkRequest {
   title: string;
+  description: string;
   artType: number;
   tags: string[];
   genres: string[];
@@ -59,6 +60,7 @@ export class UploadService {
     uploadProcessId: string,
     publishArtworkRequest: PublishArtworkRequest
   ): Promise<boolean> {
+    console.log(publishArtworkRequest);
     return new Promise((resolve, reject) => {
       this.http
         .post(

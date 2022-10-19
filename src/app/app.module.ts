@@ -28,6 +28,9 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { AuthInterceptor } from './services/auth.service';
 
 import { MyArtworksComponent } from './components/my-artworks/my-artworks.component';
+import { ArtworkPageComponent } from './components/artwork-page/artwork-page.component';
+import { ArtworkCardComponent } from './components/artwork-card/artwork-card.component';
+import { OtherUserArtworksComponent } from './components/other-user-artworks/other-user-artworks.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +42,9 @@ import { MyArtworksComponent } from './components/my-artworks/my-artworks.compon
     UploadPageComponent,
     MyAccountPageComponent,
     MyArtworksComponent,
+    ArtworkPageComponent,
+    ArtworkCardComponent,
+    OtherUserArtworksComponent,
   ],
   imports: [
     BrowserModule,
