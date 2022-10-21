@@ -46,8 +46,16 @@ export class ArtworkPageComponent implements OnInit, OnDestroy {
     return isNaN(number);
   }
 
-  async downVote() {}
+  async downVote() {
+    let success: boolean = await this.artworksService.downVote(this.id);
+    if (success) {
+      this.getArtworkDetails();
+    }
+  }
   async upVote() {
     let success: boolean = await this.artworksService.upVote(this.id);
+    if (success) {
+      this.getArtworkDetails();
+    }
   }
 }

@@ -51,7 +51,7 @@ export class TopBarComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     let userData = await this.userService.getUserData();
-    // this.username = userData.username;
+    this.username = userData.username;
   }
 
   expand() {

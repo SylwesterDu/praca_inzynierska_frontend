@@ -97,4 +97,18 @@ export class ArtworksService {
         });
     });
   }
+
+  downVote(id: string): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.http
+        .put(`${this.API_URL}/artwork/${id}/downvote`, {
+          observe: 'response',
+        })
+        .pipe(shareReplay())
+        .subscribe({
+          next: (result) => resolve(true),
+          error: (err) => reject(false),
+        });
+    });
+  }
 }
