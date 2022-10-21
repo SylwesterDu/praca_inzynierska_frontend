@@ -1,0 +1,9 @@
+<mat-card class="content">
+  <h1 class="comments_label">Komentarze</h1>
+  <div class="comments">
+    <app-comment
+      *ngFor="let comment of comments"
+      [commentData]="comment"
+    ></app-comment>
+  </div>
+</mat-card>

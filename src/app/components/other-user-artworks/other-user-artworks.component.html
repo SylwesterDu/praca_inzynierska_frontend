@@ -3,4 +3,6 @@
     *ngFor="let artwork of artworks"
     [artworkData]="artwork"
   ></app-artwork-card>
+
+  <p class="no_more_artworks" *ngIf="artworks.length === 0">brak</p>
 </div>

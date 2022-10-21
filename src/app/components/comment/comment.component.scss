@@ -1,0 +1,35 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+  border-bottom: 1px solid rgba($color: grey, $alpha: 0.1);
+  padding: 10px 0;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  background-color: grey;
+  display: grid;
+  place-items: center;
+  border-radius: 30px;
+  font-size: 30px;
+}
+
+.comment_data {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.creator_name {
+  font-size: 1.3em;
+  font-weight: 500;
+  margin-bottom: 4px;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.content {
+  color: rgba($color: white, $alpha: 0.8);
+}

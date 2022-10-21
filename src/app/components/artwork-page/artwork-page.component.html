@@ -2,31 +2,37 @@
 <div class="main">
   <div class="player_wrapper">
     <div class="player">{{ artworkDetails?.id }}</div>
-    <div class="description_and_rating">
-      <div class="description">{{ artworkDetails?.description }}</div>
-      <div class="rating">
-        <mat-icon (click)="upVote()">thumb_up</mat-icon>
-        {{ artworkDetails?.upvotes }}
-        <span style="padding-right: 10px"></span>
-        <mat-icon (click)="downVote()">thumb_down</mat-icon>
-        {{ artworkDetails?.downvotes }}
-        <span style="padding-right: 10px"></span>
-        <span class="upVote_percentage">
-          <span *ngIf="isNaN(upvotesRatio)">Brak ocen.</span>
-          <span *ngIf="!isNaN(upvotesRatio)">
-            ({{ upvotesRatio }}% pozytywnych ocen)
+    <section class="artwork_info">
+      <mat-card class="title_and_description">
+        <h1 class="title">{{ artworkDetails?.title }}</h1>
+        <p class="description">
+          {{ artworkDetails?.description }}
+        </p>
+        <div class="rating">
+          <mat-icon (click)="upVote()">thumb_up</mat-icon>
+          {{ artworkDetails?.upvotes }}
+          <span style="padding-right: 10px"></span>
+          <mat-icon (click)="downVote()">thumb_down</mat-icon>
+          {{ artworkDetails?.downvotes }}
+          <span style="padding-right: 10px"></span>
+          <span class="upVote_percentage">
+            <span *ngIf="isNaN(upvotesRatio)">Brak ocen.</span>
+            <span *ngIf="!isNaN(upvotesRatio)">
+              ({{ upvotesRatio }}% pozytywnych ocen)
+            </span>
           </span>
-        </span>
-      </div>
-    </div>
-  </div>
-  <div class="more_artworks">
-    <h2>Inne prace tego użytkownika:</h2>
-    <section class="artworks_container">
-      <app-other-user-artworks
-        [currentArtworkId]="id"
-      ></app-other-user-artworks>
+        </div>
+      </mat-card>
     </section>
   </div>
-  <div class="comments">comments</div>
+  <div class="more_artworks">
+    <h2 class="other_artworks_label">Inne prace tego użytkownika:</h2>
+    <section class="artworks_container">
+      <app-other-user-artworks [currentArtworkId]="id">
+      </app-other-user-artworks>
+    </section>
+  </div>
+  <section class="comments">
+    <app-comments></app-comments>
+  </section>
 </div>

@@ -17,12 +17,23 @@
   width: 600px;
   min-width: 60%;
   flex: 1;
+  background-color: white;
 }
 
-.description_and_rating {
+.artwork_info {
   flex: 1;
   min-width: 300px;
   min-height: min-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 2.4em;
+}
+
+.title_and_description {
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -33,9 +44,13 @@
 
 .rating {
   height: 50px;
-  font-size: 24px;
+  font-size: 26px;
   padding-left: 20px;
   font-weight: 300;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
 }
 
 .upVote_percentage {
@@ -53,6 +68,7 @@ mat-icon {
   height: min-content;
 }
 
-div {
-  border: 1px dotted red;
+.other_artworks_label {
+  font-size: 2em;
+  margin-top: 20px;
 }
