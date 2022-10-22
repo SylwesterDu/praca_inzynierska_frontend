@@ -1,7 +1,9 @@
 <app-top-bar></app-top-bar>
 <div class="main">
-  <div class="player_wrapper">
-    <div class="player">{{ artworkDetails?.id }}</div>
+  <div class="art_wrapper">
+    <div class="art">
+      <app-gallery [resourceUrls]="artworkDetails?.resourceUrls"></app-gallery>
+    </div>
     <section class="artwork_info">
       <mat-card class="title_and_description">
         <h1 class="title">{{ artworkDetails?.title }}</h1>

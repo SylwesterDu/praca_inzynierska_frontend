@@ -35,6 +35,7 @@ export class ArtworkPageComponent implements OnInit, OnDestroy {
 
   async getArtworkDetails() {
     this.artworkDetails = await this.artworksService.getArtworkDetails(this.id);
+    console.log(this.artworkDetails);
     this.upvotesRatio =
       this.artworkDetails!.upvotes /
         (this.artworkDetails!.upvotes + this.artworkDetails!.downvotes) ?? 0;

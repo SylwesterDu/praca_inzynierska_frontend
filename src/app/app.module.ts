@@ -33,6 +33,7 @@ import { ArtworkCardComponent } from './components/artwork-card/artwork-card.com
 import { OtherUserArtworksComponent } from './components/other-user-artworks/other-user-artworks.component';
 import { CommentsComponent } from './components/comments/comments.component';
 import { CommentComponent } from './components/comment/comment.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { CommentComponent } from './components/comment/comment.component';
     OtherUserArtworksComponent,
     CommentsComponent,
     CommentComponent,
+    GalleryComponent,
   ],
   imports: [
     BrowserModule,

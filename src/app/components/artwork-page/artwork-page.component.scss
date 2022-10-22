@@ -5,19 +5,17 @@
   padding-top: 70px;
 }
 
-.player_wrapper {
+.art_wrapper {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.player {
-  height: 60vh;
-  min-height: 400px;
-  width: 600px;
+.art {
+  height: min-content;
+  min-height: 60vh;
   min-width: 60%;
   flex: 1;
-  background-color: white;
 }
 
 .artwork_info {
