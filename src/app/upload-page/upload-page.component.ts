@@ -1,7 +1,7 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import {
   MatChip,
   MatChipInputEvent,
@@ -35,25 +35,25 @@ export class UploadPageComponent implements OnInit {
 
   @ViewChild('fruitInput') tagInput?: ElementRef<HTMLInputElement>;
 
-  titleAndDescriptionFormGroup: FormGroup = this.formBuilder.group({
+  titleAndDescriptionFormGroup: UntypedFormGroup = this.formBuilder.group({
     title: '',
     description: '',
   });
 
-  typeAndCategoryFormGroup: FormGroup = this.formBuilder.group({
+  typeAndCategoryFormGroup: UntypedFormGroup = this.formBuilder.group({
     type: 1,
     category: '',
   });
 
-  tagsFormGroup: FormGroup = this.formBuilder.group({
+  tagsFormGroup: UntypedFormGroup = this.formBuilder.group({
     tags: [],
   });
 
-  fileFormGroup: FormGroup = this.formBuilder.group({ file: '' });
+  fileFormGroup: UntypedFormGroup = this.formBuilder.group({ file: '' });
 
-  tagsFormControl: FormControl = new FormControl('');
+  tagsFormControl: UntypedFormControl = new UntypedFormControl('');
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private uploadService: UploadService,
     private router: Router
   ) {}

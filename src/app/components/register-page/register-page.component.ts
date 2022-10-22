@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, RegisterResult } from 'src/app/services/auth.service';
 
@@ -23,7 +23,7 @@ export class RegisterPageComponent implements OnInit {
   hidePassword: boolean = true;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authService: AuthService,
     private router: Router
   ) {}
