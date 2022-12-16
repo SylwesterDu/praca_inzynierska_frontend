@@ -1,3 +1,4 @@
+"use client";
 import {
   Button,
   Card,
@@ -21,6 +22,11 @@ export function TopBar() {
   const [username, setUsername] = useState<string>("");
   function toggleSearch(value: boolean) {
     setShowSearchPanel(value);
+  }
+
+  const jwt = localStorage.getItem("jwt");
+  if (jwt) {
+    login();
   }
 
   async function checkIfLogged() {
@@ -49,8 +55,9 @@ export function TopBar() {
           css={{
             position: "absolute",
             top: 100,
-            margin: " 0 12px",
-            width: "calc(100% - 24px)",
+            margin: " 0 70px",
+            width: "calc(100% - 140px)",
+            zIndex: 1,
           }}
         >
           <Card.Body css={{ position: "relative" }}>

@@ -16,6 +16,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <NextUIProvider theme={darkTheme}>
       <AuthProvider>
         <TopBar />
+        <div style={{ height: 100 }}></div>
+
         {children}
       </AuthProvider>
     </NextUIProvider>

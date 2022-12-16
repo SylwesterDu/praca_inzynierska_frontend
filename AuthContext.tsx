@@ -27,8 +27,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const jwt = localStorage.getItem("jwt");
-  const [user, setUser] = useState<boolean>(jwt != null);
+  const [user, setUser] = useState<boolean>(false);
 
   const login = () => {
     setUser(true);
