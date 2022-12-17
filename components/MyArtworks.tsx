@@ -1,5 +1,6 @@
 "use client";
-import { Text, Container, Button, Row, Grid } from "@nextui-org/react";
+import { Text, Container, Button, Row, Grid, Col } from "@nextui-org/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "../axios";
@@ -34,13 +35,19 @@ export function MyArtworks() {
           </Button>
         </Row>
         {artworks.length == 0 && <Text h3>Nie dodałeś żadnych dzieł.</Text>}
-        <Grid.Container gap={1}>
-          {artworks.map((artwork) => (
-            <Grid key={artwork.id} xs={3}>
-              <ArtworkCard data={artwork} />
-            </Grid>
-          ))}
-        </Grid.Container>
+        <Container gap={0}>
+          <Row gap={0} wrap="wrap">
+            {artworks.map((artwork) => (
+              <div
+                key={artwork.id}
+                style={{ marginRight: 20 }}
+                onClick={() => router.replace(`artworks/${artwork.id}`)}
+              >
+                <ArtworkCard data={artwork} />
+              </div>
+            ))}
+          </Row>
+        </Container>
       </Container>
     </>
   );

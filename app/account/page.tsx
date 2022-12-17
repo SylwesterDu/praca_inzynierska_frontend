@@ -10,10 +10,8 @@ import {
   Container,
   Image,
 } from "@nextui-org/react";
-import { Form, Formik, FormikValues } from "formik";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../AuthContext";
 import { api } from "../../axios";
 import { MyAccount } from "../../components/MyAccount";
 import { MyArtworks } from "../../components/MyArtworks";

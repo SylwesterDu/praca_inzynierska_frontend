@@ -77,15 +77,11 @@ export function TopBar() {
       )}
       <Navbar isBordered variant="sticky" css={{ position: "absolute" }}>
         <Navbar.Brand>
-          <Text
-            css={{ cursor: "pointer" }}
-            b
-            color="inherit"
-            hideIn="xs"
-            onClick={() => router.replace("/")}
-          >
-            Share Your Art!
-          </Text>
+          <Button light aria-label="logo" onPress={() => router.replace("/")}>
+            <Text css={{ cursor: "pointer" }} b color="inherit" hideIn="xs">
+              Share Your Art!
+            </Text>
+          </Button>
         </Navbar.Brand>
         <Navbar.Content hideIn="xs">
           <Input
@@ -103,11 +99,17 @@ export function TopBar() {
         {!user ? (
           <>
             <Navbar.Content>
-              <Navbar.Link onClick={() => router.replace("login")}>
+              <Navbar.Link
+                aria-label="zaloguj się"
+                onClick={() => router.replace("login")}
+              >
                 Zaloguj się
               </Navbar.Link>
               <Navbar.Item>
-                <Button onClick={() => router.replace("register")}>
+                <Button
+                  aria-label="Zarejestruj się"
+                  onClick={() => router.replace("register")}
+                >
                   Załóż konto
                 </Button>
               </Navbar.Item>
@@ -122,6 +124,7 @@ export function TopBar() {
               <Dropdown.Menu>
                 <Dropdown.Item key="account">
                   <Button
+                    aria-label="moje konto"
                     light
                     onClick={() => {
                       router.replace("account");
@@ -131,7 +134,7 @@ export function TopBar() {
                   </Button>
                 </Dropdown.Item>
                 <Dropdown.Item withDivider key="logout" color="warning">
-                  <Button light onClick={logOff}>
+                  <Button aria-label="wyloguj" light onClick={logOff}>
                     Wyloguj
                   </Button>
                 </Dropdown.Item>
