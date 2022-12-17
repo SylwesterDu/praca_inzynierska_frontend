@@ -24,26 +24,26 @@ export function TopBar() {
     setShowSearchPanel(value);
   }
 
-  const jwt = localStorage.getItem("jwt");
-  if (jwt) {
-    login();
-  }
-
   async function checkIfLogged() {
-    if (localStorage.jwt != undefined) {
-      console.log("get user data");
-      const response = await api.get("user");
-      setUsername(response.data.username);
+    if (typeof window !== "undefined") {
+      if (localStorage.jwt != undefined) {
+        login();
+        const response = await api.get("user");
+        setUsername(response.data.username);
+      }
     }
   }
 
   function logOff() {
-    localStorage.removeItem("jwt");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("jwt");
+    }
     logout();
   }
 
   useEffect(() => {
     checkIfLogged();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const router = useRouter();
@@ -94,6 +94,7 @@ export function TopBar() {
             placeholder="Wyszukaj"
             label=""
             fullWidth
+            aria-label="search"
             contentRight={
               <FontAwesomeIcon icon={faSearch} style={{ cursor: "pointer" }} />
             }

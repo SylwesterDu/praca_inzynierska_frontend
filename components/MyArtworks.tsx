@@ -40,16 +40,6 @@ export function MyArtworks() {
               <ArtworkCard data={artwork} />
             </Grid>
           ))}
-          {artworks.map((artwork) => (
-            <Grid key={artwork.id} xs={3}>
-              <ArtworkCard data={artwork} />
-            </Grid>
-          ))}
-          {artworks.map((artwork) => (
-            <Grid key={artwork.id} xs={3}>
-              <ArtworkCard data={artwork} />
-            </Grid>
-          ))}
         </Grid.Container>
       </Container>
     </>

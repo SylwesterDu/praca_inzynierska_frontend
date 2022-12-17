@@ -1,3 +1,4 @@
+"use client";
 import { Card, Image, Text, Button, Spacer } from "@nextui-org/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";

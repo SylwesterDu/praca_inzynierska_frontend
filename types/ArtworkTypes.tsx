@@ -8,3 +8,11 @@ export type Artwork = {
   genres: string[];
   tags: string[];
 };
+
+export type UploadArtwork = {
+  title: string;
+  description: string;
+  artType: number;
+  genres: string[];
+  tags: string[];
+};

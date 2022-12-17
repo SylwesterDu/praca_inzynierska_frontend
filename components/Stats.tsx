@@ -1,3 +1,4 @@
+"use client";
 import { Text } from "@nextui-org/react";
 
 export function Stats() {
