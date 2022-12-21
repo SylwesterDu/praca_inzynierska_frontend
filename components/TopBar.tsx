@@ -75,10 +75,16 @@ export function TopBar() {
           </Card.Body>
         </Card>
       )}
-      <Navbar isBordered variant="sticky" css={{ position: "absolute" }}>
+      <Navbar isBordered variant="floating" css={{ position: "absolute" }}>
         <Navbar.Brand>
           <Button light aria-label="logo" onPress={() => router.replace("/")}>
-            <Text css={{ cursor: "pointer" }} b color="inherit" hideIn="xs">
+            <Text
+              size="$lg"
+              css={{ cursor: "pointer" }}
+              b
+              color="inherit"
+              hideIn="xs"
+            >
               Share Your Art!
             </Text>
           </Button>

@@ -1,5 +1,3 @@
-import { createTheme, NextUIProvider } from "@nextui-org/react";
-import { TopBar } from "../components/TopBar";
 import Providers from "./Providers";
 
 export default function RootLayout({

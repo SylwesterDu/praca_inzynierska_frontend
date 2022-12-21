@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Card,
   Col,
+  Collapse,
   Container,
   Divider,
   Grid,
@@ -13,14 +14,19 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { Player } from "video-react";
+
 import { api } from "../../../axios";
 import { ArtworkCard } from "../../../components/ArtworkCard";
+import { Comments } from "../../../components/Comments";
 import { Artwork, ArtworkDetails } from "../../../types/ArtworkTypes";
 
 export default function Page({ params }: any) {
   const router = useRouter();
   const [artworkDetails, setArtworkDetails] = useState<ArtworkDetails>();
   const [otherArtworks, setOtherArtworks] = useState<Artwork[]>([]);
+  const [hasWindow, setHasWindow] = useState(false);
+
   const ratio = useMemo(() => {
     if (artworkDetails) {
       return (
@@ -56,13 +62,21 @@ export default function Page({ params }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setHasWindow(true);
+    }
+  }, []);
+
   return (
     <Container>
       <Grid.Container gap={1}>
         <Grid md={8} sm={7} xs={12}>
           <div
             style={{ height: 500, width: "100%", border: "1px solid #404040" }}
-          ></div>
+          >
+            {hasWindow && <Player></Player>}
+          </div>
         </Grid>
         <Grid md={4} sm={5} xs={12}>
           <Card>
@@ -118,20 +132,24 @@ export default function Page({ params }: any) {
         </Grid>
       </Grid.Container>
       <Spacer y={1} />
-      <Text h2>Inne dzieła użytkownika:</Text>
-      <Row wrap="wrap">
-        {otherArtworks.map((artwork) => (
-          <div
-            key={artwork.id}
-            style={{ marginRight: 20 }}
-            onClick={() => {
-              router.replace(`artworks/${artwork.id}`);
-            }}
-          >
-            <ArtworkCard data={artwork} />
-          </div>
-        ))}
-      </Row>
+      <Collapse title="Inne prace tego użytkownika" bordered>
+        <Row wrap="wrap">
+          {otherArtworks.map((artwork) => (
+            <div
+              key={artwork.id}
+              style={{ marginRight: 20 }}
+              onClick={() => {
+                router.replace(`artworks/${artwork.id}`);
+              }}
+            >
+              <ArtworkCard data={artwork} />
+            </div>
+          ))}
+        </Row>
+      </Collapse>
+      <Spacer y={1} />
+      <Comments artworkId={params.id} />
+      <Spacer y={2} />
     </Container>
   );
 }
