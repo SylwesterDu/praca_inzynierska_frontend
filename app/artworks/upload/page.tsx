@@ -11,6 +11,7 @@ import {
   Input,
   Dropdown,
   FormElement,
+  Loading,
 } from "@nextui-org/react";
 import { Form, Formik } from "formik";
 import { createRef, Key, useEffect, useMemo, useRef, useState } from "react";
@@ -19,12 +20,15 @@ import { UploadArtwork } from "../../../types/ArtworkTypes";
 import { useRouter } from "next/navigation";
 export default function Page() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(4);
   const [artType, setArtType] = useState<Key>(0);
   const [genre, setGenre] = useState<Key>("");
   const [uploadProcessId, setUploadProcessId] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
+  const [currentFileUpload, setCurrentFileUpload] = useState<
+    string[] | undefined
+  >(undefined);
   const fileButton = createRef<FormElement>();
 
   const genres: { [artType: number]: string[] } = useMemo(() => {
@@ -57,6 +61,7 @@ export default function Page() {
   async function beginUploadProcess() {
     const response = await api.get("upload");
     setUploadProcessId(response.data.id);
+    console.log(response.data);
   }
 
   useEffect(() => {
@@ -98,6 +103,8 @@ export default function Page() {
   }
 
   async function addFile(e: any) {
+    const filesArray: File[] = Array.from(e.currentTarget.files);
+    setCurrentFileUpload(filesArray.map((file: File) => file.name));
     setFiles([...files, ...e.target.files]);
     for (const file of e.target.files) {
       let formData = new FormData();
@@ -107,11 +114,12 @@ export default function Page() {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response);
+      setCurrentFileUpload(currentFileUpload?.filter(file.name));
     }
   }
 
   async function uploadArtwork(values: UploadArtwork) {
+    console.log(values);
     const response = await api.post(
       `upload/${uploadProcessId}/publish`,
       values
@@ -250,7 +258,16 @@ export default function Page() {
                       {files.length != 0 && (
                         <Col>
                           {files.map((file, index) => (
-                            <Text key={index}>{file.name}</Text>
+                            <Row
+                              key={index}
+                              align="center"
+                              css={{ columnGap: 20 }}
+                            >
+                              <Text>{file.name}</Text>{" "}
+                              {currentFileUpload?.some(
+                                (filename) => filename == file.name
+                              ) && <Loading size="xs" />}
+                            </Row>
                           ))}
                         </Col>
                       )}

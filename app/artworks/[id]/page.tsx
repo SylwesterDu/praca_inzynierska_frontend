@@ -11,10 +11,13 @@ import {
   Row,
   Spacer,
   Text,
+  Image,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import Plyr from "plyr-react";
+import "plyr-react/plyr.css";
+
 import { useEffect, useMemo, useState } from "react";
-import { Player } from "video-react";
 
 import { api } from "../../../axios";
 import { ArtworkCard } from "../../../components/ArtworkCard";
@@ -73,9 +76,30 @@ export default function Page({ params }: any) {
       <Grid.Container gap={1}>
         <Grid md={8} sm={7} xs={12}>
           <div
-            style={{ height: 500, width: "100%", border: "1px solid #404040" }}
+            style={{
+              height: 500,
+              width: "100%",
+              border: "1px solid #404040",
+              borderRadius: 12,
+            }}
           >
-            {hasWindow && <Player></Player>}
+            {artworkDetails?.artType == 0 && (
+              <Plyr
+                source={{
+                  type: "video",
+                  sources: [{ src: artworkDetails?.resourceUrls[0] }],
+                }}
+              ></Plyr>
+            )}
+            {artworkDetails?.artType == 2 && (
+              <Image
+                src={artworkDetails.resourceUrls[0]}
+                alt=""
+                width="100%"
+                height="100%"
+                objectFit="contain"
+              />
+            )}
           </div>
         </Grid>
         <Grid md={4} sm={5} xs={12}>

@@ -1,6 +1,8 @@
 "use client";
 import { Card, Text, Input, Row, Spacer, Button } from "@nextui-org/react";
 import { Form, Formik } from "formik";
+import { useRouter } from "next/navigation";
+import { api } from "../../axios";
 
 type RegisterValues = {
   email: string;
@@ -10,7 +12,14 @@ type RegisterValues = {
 };
 
 export default function Page() {
-  async function register(values: RegisterValues) {}
+  const router = useRouter();
+
+  async function register(values: RegisterValues) {
+    const response = await api.post("auth/register", values);
+    if (response.status == 200) {
+      router.replace("login");
+    }
+  }
 
   return (
     <div
@@ -79,7 +88,7 @@ export default function Page() {
                 ></Input.Password>
                 <Spacer y={2} />
 
-                <Button>Zaloguj sie</Button>
+                <Button type="submit">Załóż konto</Button>
               </Card.Body>
             </Form>
           )}
