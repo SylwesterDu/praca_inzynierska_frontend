@@ -19,6 +19,14 @@ export type UploadArtwork = {
   tags: string[];
 };
 
+export type UpdateArtwork = {
+  title: string;
+  description: string;
+  artType: number;
+  genres: string[];
+  tags: string[];
+};
+
 export type ArtworkDetails = {
   id: string;
   title: string;

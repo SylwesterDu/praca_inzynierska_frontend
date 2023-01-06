@@ -166,7 +166,7 @@ export default function Page({ params }: any) {
                 router.replace(`artworks/${artwork.id}`);
               }}
             >
-              <ArtworkCard data={artwork} />
+              <ArtworkCard data={artwork} userType="Spectator" />
             </div>
           ))}
         </Row>

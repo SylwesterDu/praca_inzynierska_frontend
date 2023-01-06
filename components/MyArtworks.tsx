@@ -35,19 +35,21 @@ export function MyArtworks() {
           </Button>
         </Row>
         {artworks.length == 0 && <Text h3>Nie dodałeś żadnych dzieł.</Text>}
-        <Container gap={0}>
-          <Row gap={0} wrap="wrap">
-            {artworks.map((artwork) => (
-              <div
-                key={artwork.id}
-                style={{ marginRight: 20 }}
-                onClick={() => router.replace(`artworks/${artwork.id}`)}
-              >
-                <ArtworkCard data={artwork} />
-              </div>
-            ))}
-          </Row>
-        </Container>
+        <Row gap={0} wrap="wrap">
+          {artworks.map((artwork) => (
+            <div
+              key={artwork.id}
+              style={{ marginRight: 20, marginBottom: 20 }}
+              onClick={() => router.replace(`artworks/${artwork.id}`)}
+            >
+              <ArtworkCard
+                data={artwork}
+                userType="Owner"
+                refreshParent={getUserArtworks}
+              />
+            </div>
+          ))}
+        </Row>
       </Container>
     </>
   );

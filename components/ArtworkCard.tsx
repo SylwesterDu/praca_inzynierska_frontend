@@ -1,13 +1,38 @@
 "use client";
 
-import { faThumbsUp, faThumbsDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faThumbsUp,
+  faThumbsDown,
+  faDeleteLeft,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card, Image, Row, Text } from "@nextui-org/react";
+import { Button, Card, Dropdown, Image, Row, Text } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { createRef } from "react";
+import { api } from "../axios";
 import { Artwork } from "../types/ArtworkTypes";
 
-export function ArtworkCard({ data }: { data: Artwork }) {
+export function ArtworkCard({
+  data,
+  userType,
+  refreshParent,
+}: {
+  data: Artwork;
+  userType: "Owner" | "Spectator";
+  refreshParent?: any;
+}) {
+  const router = useRouter();
+
+  async function deleteArtwork() {
+    const response = await api.delete(`artwork/${data.id}`);
+    if (response.status == 200) {
+      refreshParent();
+    }
+  }
+
   return (
-    <Card css={{ mw: 240, cursor: "pointer" }}>
+    <Card css={{ mw: 230, cursor: "pointer" }}>
       <Card.Body>
         <Image
           src="https://www.shutterstock.com/image-vector/music-notes-600w-464083592.jpg"
@@ -36,6 +61,31 @@ export function ArtworkCard({ data }: { data: Artwork }) {
         </Row>
         <Text color="grey">{`${data.views} wyświetleń`}</Text>
       </Card.Body>
+      {userType == "Owner" && (
+        <Dropdown>
+          <Dropdown.Button css={{ width: 230 }} flat>
+            Wykonaj akcję
+          </Dropdown.Button>
+          <Dropdown.Menu css={{ $$dropdownMenuWidth: "200px" }}>
+            <Dropdown.Item key="new">
+              <Button
+                onClick={() => {
+                  router.replace(`artworks/${data.id}/edit`);
+                }}
+                light
+              >
+                Edytuj
+              </Button>
+            </Dropdown.Item>
+
+            <Dropdown.Item withDivider key="delete" color="error">
+              <Button onClick={deleteArtwork} light>
+                Usuń
+              </Button>
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      )}
     </Card>
   );
 }
