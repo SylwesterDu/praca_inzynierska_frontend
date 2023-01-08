@@ -20,6 +20,7 @@ export function TopBar() {
   const { user, login, logout } = useAuth();
   const [showSearchPanel, setShowSearchPanel] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
+  const [roles, setRoles] = useState<string[]>([]);
   function toggleSearch(value: boolean) {
     setShowSearchPanel(value);
   }
@@ -30,6 +31,7 @@ export function TopBar() {
         login();
         const response = await api.get("user");
         setUsername(response.data.username);
+        setRoles(response.data.roles);
       }
     }
   }
@@ -139,6 +141,21 @@ export function TopBar() {
                     Mój profil
                   </Button>
                 </Dropdown.Item>
+
+                {roles.some((role) => role == "admin") && (
+                  <Dropdown.Item key="admin-panel">
+                    <Button
+                      aria-label="panel administratorski"
+                      light
+                      onClick={() => {
+                        router.replace("admin");
+                      }}
+                    >
+                      Panel administratorski
+                    </Button>
+                  </Dropdown.Item>
+                )}
+
                 <Dropdown.Item withDivider key="logout" color="warning">
                   <Button aria-label="wyloguj" light onClick={logOff}>
                     Wyloguj

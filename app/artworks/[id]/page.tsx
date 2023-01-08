@@ -1,5 +1,9 @@
 "use client";
-import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFlag,
+  faThumbsDown,
+  faThumbsUp,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Card,
@@ -12,6 +16,11 @@ import {
   Spacer,
   Text,
   Image,
+  Badge,
+  Button,
+  Modal,
+  Dropdown,
+  Input,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import Plyr from "plyr-react";
@@ -28,10 +37,15 @@ export default function Page({ params }: any) {
   const router = useRouter();
   const [artworkDetails, setArtworkDetails] = useState<ArtworkDetails>();
   const [otherArtworks, setOtherArtworks] = useState<Artwork[]>([]);
-  const [hasWindow, setHasWindow] = useState(false);
-
+  const [showModal, setShowModal] = useState(false);
+  const [reportForOther, setReportForOther] = useState(false);
+  const [reportReason, setReportReason] = useState("Zła kategoria");
+  const [showCustomReportReason, setShowCustomReportReason] = useState(false);
   const ratio = useMemo(() => {
     if (artworkDetails) {
+      if (artworkDetails.upvotes == 0 && artworkDetails.downvotes > 0) {
+        return 0;
+      }
       return (
         ((artworkDetails!.upvotes + artworkDetails!.downvotes) /
           artworkDetails!.upvotes) *
@@ -65,115 +79,250 @@ export default function Page({ params }: any) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setHasWindow(true);
-    }
-  }, []);
+  async function upvote() {
+    await api.put(`artwork/${params.id}/upvote`);
+    getArtworkDetails();
+  }
+
+  async function downvote() {
+    await api.put(`artwork/${params.id}/downvote`);
+    getArtworkDetails();
+  }
 
   return (
-    <Container>
-      <Grid.Container gap={1}>
-        <Grid md={8} sm={7} xs={12}>
-          <div
-            style={{
-              height: 500,
-              width: "100%",
-              border: "1px solid #404040",
-              borderRadius: 12,
-            }}
-          >
-            {artworkDetails?.artType == 0 && (
-              <Plyr
-                source={{
-                  type: "video",
-                  sources: [{ src: artworkDetails?.resourceUrls[0] }],
-                }}
-              ></Plyr>
-            )}
-            {artworkDetails?.artType == 2 && (
-              <Image
-                src={artworkDetails.resourceUrls[0]}
-                alt=""
-                width="100%"
-                height="100%"
-                objectFit="contain"
-              />
-            )}
-          </div>
-        </Grid>
-        <Grid md={4} sm={5} xs={12}>
-          <Card>
-            <Card.Header>
-              <Text h3>{artworkDetails?.title}</Text>
-            </Card.Header>
-            <Card.Divider />
-            <Card.Body>
-              <Text h5>Opis</Text>
-              <Text>{artworkDetails?.description}</Text>
-            </Card.Body>
-            <Card.Divider />
-            <Card.Footer>
-              <Grid.Container>
-                <Grid xs={5} sm={5} md={5} xl={5} lg={5}>
-                  <Row justify="space-evenly">
-                    <Row justify="center">
-                      <FontAwesomeIcon
-                        color="green"
-                        style={{ fontSize: 27 }}
-                        icon={faThumbsUp}
-                      />
-                      <Text h4>&nbsp;{artworkDetails?.upvotes}</Text>
-                    </Row>
+    <>
+      <Modal
+        closeButton
+        aria-labelledby="modal-title"
+        open={showModal}
+        onClose={() => {
+          setShowModal(false);
+        }}
+      >
+        <Modal.Header>
+          <Text id="modal-title" size={18}>
+            Zgłoś tę pracę
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Col>
+            <Text>Podaj powód zgłoszenia</Text>
+            <Dropdown>
+              <Dropdown.Button flat css={{ width: "100%" }}>
+                {showCustomReportReason ? "Inne" : reportReason}
+              </Dropdown.Button>
+              <Dropdown.Menu css={{ $$dropdownMenuWidth: "400px" }}>
+                <Dropdown.Item key="caytegory">
+                  <Button
+                    light
+                    onClick={() => {
+                      setReportReason("Zła kategoria");
+                      setShowCustomReportReason(false);
+                    }}
+                  >
+                    Zła kategoria
+                  </Button>
+                </Dropdown.Item>
+                <Dropdown.Item key="copyright">
+                  <Button
+                    light
+                    onClick={() => {
+                      setReportReason("Prawa autorskie");
+                      setShowCustomReportReason(false);
+                    }}
+                  >
+                    Prawa autorskie
+                  </Button>
+                </Dropdown.Item>
+                <Dropdown.Item key="edit">
+                  <Button
+                    light
+                    onClick={() => {
+                      setReportReason("Treść nieodpowiednia dla dzieci");
+                      setShowCustomReportReason(false);
+                    }}
+                  >
+                    Treść nieodpowiednia dla dzieci
+                  </Button>
+                </Dropdown.Item>
+                <Dropdown.Item key="other">
+                  <Button light onClick={() => setShowCustomReportReason(true)}>
+                    Inne
+                  </Button>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
 
-                    <Row justify="center">
-                      <FontAwesomeIcon
-                        color="red"
-                        style={{ fontSize: 27 }}
-                        icon={faThumbsDown}
-                      />
-                      <Text h4>&nbsp;{artworkDetails?.downvotes}</Text>
-                    </Row>
-                  </Row>
-                </Grid>
-                <Grid xs={7} sm={7} md={7} xl={7} lg={7}>
-                  <Text>
-                    {isNaN(ratio!) ? (
-                      "Brak ocen"
-                    ) : (
-                      <>
-                        <span style={{ fontWeight: "bold" }}>
-                          {ratio}% {` `}
-                        </span>
-                        {"pozytywnych ocen"}
-                      </>
-                    )}
-                  </Text>
-                </Grid>
-              </Grid.Container>
-            </Card.Footer>
-          </Card>
-        </Grid>
-      </Grid.Container>
-      <Spacer y={1} />
-      <Collapse title="Inne prace tego użytkownika" bordered>
-        <Row wrap="wrap">
-          {otherArtworks.map((artwork) => (
+            {showCustomReportReason && (
+              <>
+                <Spacer y={1} />
+                <Input
+                  fullWidth
+                  bordered
+                  borderWeight="light"
+                  placeholder="Wpisz powód zgłoszenia"
+                />
+              </>
+            )}
+          </Col>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            css={{ width: "100%" }}
+            color="success"
+            onPress={() => setShowModal(false)}
+          >
+            Wyślij
+          </Button>
+          <Button css={{ width: "100%" }} onPress={() => setShowModal(false)}>
+            Zamknij
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Container>
+        <Grid.Container gap={1}>
+          <Grid md={8} sm={7} xs={12}>
             <div
-              key={artwork.id}
-              style={{ marginRight: 20 }}
-              onClick={() => {
-                router.replace(`artworks/${artwork.id}`);
+              style={{
+                height: 500,
+                width: "100%",
+                border: "1px solid #404040",
+                borderRadius: 12,
               }}
             >
-              <ArtworkCard data={artwork} userType="Spectator" />
+              {artworkDetails?.artType == 0 && (
+                <Plyr
+                  source={{
+                    type: "video",
+                    sources: [{ src: artworkDetails?.resourceUrls[0] }],
+                  }}
+                ></Plyr>
+              )}
+              {artworkDetails?.artType == 2 && (
+                <Image
+                  src={artworkDetails.resourceUrls[0]}
+                  alt=""
+                  width="100%"
+                  height="100%"
+                  objectFit="contain"
+                />
+              )}
             </div>
-          ))}
-        </Row>
-      </Collapse>
-      <Spacer y={1} />
-      <Comments artworkId={params.id} />
-      <Spacer y={2} />
-    </Container>
+          </Grid>
+          <Grid md={4} sm={5} xs={12}>
+            <Card>
+              <Card.Header css={{ position: "relative" }}>
+                <Text h3>{artworkDetails?.title}</Text>
+                <span onClick={() => setShowModal(true)}>
+                  <FontAwesomeIcon
+                    color="grey"
+                    style={{
+                      fontSize: 16,
+                      position: "absolute",
+                      right: 10,
+                      cursor: "pointer",
+                    }}
+                    icon={faFlag}
+                  />
+                </span>
+              </Card.Header>
+              <Card.Divider />
+              <Card.Body>
+                <Text h5>Opis</Text>
+                <Text>{artworkDetails?.description}</Text>
+                <Spacer y={1} />
+                {artworkDetails?.genres.map((genre) => (
+                  <Badge color="success" key={genre} disableOutline>
+                    {genre}
+                  </Badge>
+                ))}
+              </Card.Body>
+              <Row>
+                <Grid.Container gap={1}>
+                  {artworkDetails?.tags.map((tag) => (
+                    <Grid key={tag}>
+                      <Badge variant="flat" disableOutline>
+                        #{tag}
+                      </Badge>
+                    </Grid>
+                  ))}
+                </Grid.Container>
+              </Row>
+              <Card.Divider />
+              <Card.Footer>
+                <Col>
+                  <Grid.Container>
+                    <Grid xs={5} sm={5} md={5} xl={5} lg={5}>
+                      <Row justify="space-evenly">
+                        <Row justify="center">
+                          <span style={{ cursor: "pointer" }} onClick={upvote}>
+                            <FontAwesomeIcon
+                              color="green"
+                              style={{ fontSize: 27 }}
+                              icon={faThumbsUp}
+                            />
+                          </span>
+                          <Text h4>&nbsp;{artworkDetails?.upvotes}</Text>
+                        </Row>
+
+                        <Row justify="center">
+                          <span
+                            style={{ cursor: "pointer" }}
+                            onClick={downvote}
+                          >
+                            <FontAwesomeIcon
+                              color="red"
+                              style={{ fontSize: 27 }}
+                              icon={faThumbsDown}
+                            />
+                          </span>
+                          <Text h4>&nbsp;{artworkDetails?.downvotes}</Text>
+                        </Row>
+                      </Row>
+                    </Grid>
+                    <Grid xs={7} sm={7} md={7} xl={7} lg={7}>
+                      <Text>
+                        {isNaN(ratio!) ? (
+                          "Brak ocen"
+                        ) : (
+                          <>
+                            <span style={{ fontWeight: "bold" }}>
+                              {ratio}% {` `}
+                            </span>
+                            {"pozytywnych ocen"}
+                          </>
+                        )}
+                      </Text>
+                    </Grid>
+                  </Grid.Container>
+                  <Text size="$sm" color="grey">
+                    {artworkDetails?.views} wyświetleń.
+                  </Text>
+                </Col>
+              </Card.Footer>
+            </Card>
+          </Grid>
+        </Grid.Container>
+        <Spacer y={1} />
+        <Collapse title="Inne prace tego użytkownika" bordered>
+          <Row wrap="wrap">
+            {otherArtworks.map((artwork) => (
+              <div
+                key={artwork.id}
+                style={{ marginRight: 20 }}
+                onClick={() => {
+                  router.replace(`artworks/${artwork.id}`);
+                }}
+              >
+                <ArtworkCard data={artwork} userType="Spectator" />
+              </div>
+            ))}
+          </Row>
+        </Collapse>
+        <Spacer y={1} />
+        <Comments artworkId={params.id} />
+        <Spacer y={2} />
+      </Container>
+    </>
   );
 }
