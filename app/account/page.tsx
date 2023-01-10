@@ -12,6 +12,7 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../AuthContext";
 import { api } from "../../axios";
 import { MyAccount } from "../../components/MyAccount";
 import { MyArtworks } from "../../components/MyArtworks";
@@ -20,6 +21,8 @@ import { Stats } from "../../components/Stats";
 
 export default function Page() {
   const router = useRouter();
+
+  const { userData } = useAuth();
 
   const [username, setUsername] = useState<string>("");
   const [currentMenuOption, setCurrentMenuOption] = useState<number>(1);
@@ -45,12 +48,15 @@ export default function Page() {
             <Image
               width={320}
               height={180}
-              src="https://github.com/nextui-org/nextui/blob/next/apps/docs/public/nextui-banner.jpeg?raw=true"
+              src={
+                userData.avatar ??
+                "https://github.com/nextui-org/nextui/blob/next/apps/docs/public/nextui-banner.jpeg?raw=true"
+              }
               alt="avatar"
               objectFit="cover"
             />
             <Text h3 css={{ textAlign: "center" }}>
-              {username}
+              {userData.username}
             </Text>
 
             <nav>

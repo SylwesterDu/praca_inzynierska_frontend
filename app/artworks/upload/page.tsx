@@ -20,7 +20,7 @@ import { UploadArtwork } from "../../../types/ArtworkTypes";
 import { useRouter } from "next/navigation";
 export default function Page() {
   const router = useRouter();
-  const [currentStep, setCurrentStep] = useState(4);
+  const [currentStep, setCurrentStep] = useState(1);
   const [artType, setArtType] = useState<Key>(0);
   const [genre, setGenre] = useState<Key>("");
   const [uploadProcessId, setUploadProcessId] = useState("");

@@ -17,10 +17,8 @@ import { api } from "../axios";
 import { useAuth } from "../AuthContext";
 
 export function TopBar() {
-  const { user, login, logout } = useAuth();
+  const { logged, userData, login, logout, getUserData } = useAuth();
   const [showSearchPanel, setShowSearchPanel] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>("");
-  const [roles, setRoles] = useState<string[]>([]);
   function toggleSearch(value: boolean) {
     setShowSearchPanel(value);
   }
@@ -29,9 +27,6 @@ export function TopBar() {
     if (typeof window !== "undefined") {
       if (localStorage.jwt != undefined) {
         login();
-        const response = await api.get("user");
-        setUsername(response.data.username);
-        setRoles(response.data.roles);
       }
     }
   }
@@ -47,6 +42,12 @@ export function TopBar() {
     checkIfLogged();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (logged) {
+      getUserData();
+    }
+  }, [getUserData, logged]);
 
   const router = useRouter();
 
@@ -104,7 +105,7 @@ export function TopBar() {
             }
           ></Input>
         </Navbar.Content>
-        {!user ? (
+        {!logged ? (
           <>
             <Navbar.Content>
               <Navbar.Link
@@ -127,7 +128,7 @@ export function TopBar() {
           <>
             <Dropdown>
               <Dropdown.Trigger css={{ cursor: "pointer" }}>
-                <User src="" name={username}></User>
+                <User src="" name={userData.username}></User>
               </Dropdown.Trigger>
               <Dropdown.Menu>
                 <Dropdown.Item key="account">
@@ -142,7 +143,7 @@ export function TopBar() {
                   </Button>
                 </Dropdown.Item>
 
-                {roles.some((role) => role == "admin") && (
+                {userData.roles.some((role) => role == "admin") && (
                   <Dropdown.Item key="admin-panel">
                     <Button
                       aria-label="panel administratorski"

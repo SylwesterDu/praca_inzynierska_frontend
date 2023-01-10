@@ -9,6 +9,7 @@ export type Artwork = {
   artType: number;
   genres: string[];
   tags: string[];
+  thumbnailUrl: string;
 };
 
 export type UploadArtwork = {

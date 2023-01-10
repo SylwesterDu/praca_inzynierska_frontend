@@ -8,16 +8,27 @@ import {
 } from "react";
 import { api } from "./axios";
 
+import { User } from "./types/UserTypes";
+
 type AuthContextType = {
-  user: boolean;
+  logged: boolean;
+  userData: User;
   login: () => void;
   logout: () => void;
+  getUserData: () => void;
 };
 
 const authContextDefaultValues: AuthContextType = {
-  user: false,
+  logged: false,
+  userData: {
+    id: "",
+    username: "",
+    avatar: "",
+    roles: [],
+  },
   login: () => {},
   logout: () => {},
+  getUserData: () => {},
 };
 
 const authContext = createContext<AuthContextType>(authContextDefaultValues);
@@ -27,18 +38,39 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<boolean>(false);
+  const [logged, setLogged] = useState<boolean>(false);
+  const [userData, setUserData] = useState<User>({
+    id: "",
+    username: "",
+    avatar: "",
+    roles: [],
+  });
 
   const login = () => {
-    setUser(true);
+    setLogged(true);
+    getUserData();
   };
 
   const logout = () => {
-    setUser(false);
+    setLogged(false);
+    setUserData({
+      id: "",
+      username: "",
+      avatar: "",
+      roles: [],
+    });
   };
+
+  const getUserData = async () => {
+    const response = await api.get("user");
+    setUserData(response.data);
+  };
+
   return (
     <>
-      <authContext.Provider value={{ user, login, logout }}>
+      <authContext.Provider
+        value={{ logged, userData, login, logout, getUserData }}
+      >
         {children}
       </authContext.Provider>
     </>

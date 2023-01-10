@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Card, Dropdown, Image, Row, Text } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { createRef } from "react";
+import { createRef, useEffect, useState } from "react";
 import { api } from "../axios";
 import { Artwork } from "../types/ArtworkTypes";
 
@@ -24,6 +24,21 @@ export function ArtworkCard({
 }) {
   const router = useRouter();
 
+  const [thumbnailUrl, setThumbnailUrl] = useState(data.thumbnailUrl);
+  console.log(data.artType);
+
+  useEffect(() => {
+    if (data.artType == 0) {
+      setThumbnailUrl(
+        "https://www.shutterstock.com/image-vector/music-notes-600w-464083592.jpg"
+      );
+    } else if (data.artType == 1) {
+      setThumbnailUrl(
+        "https://storage.needpix.com/rsynced_images/book-1802861_1280.jpg"
+      );
+    }
+  }, [data.artType]);
+
   async function deleteArtwork() {
     const response = await api.delete(`artwork/${data.id}`);
     if (response.status == 200) {
@@ -34,11 +49,15 @@ export function ArtworkCard({
   return (
     <Card css={{ mw: 230, cursor: "pointer" }}>
       <Card.Body>
-        <Image
-          src="https://www.shutterstock.com/image-vector/music-notes-600w-464083592.jpg"
-          alt="thumbnail"
-          css={{ borderRadius: 5 }}
-        />
+        <div style={{ height: 130 }}>
+          <Image
+            src={thumbnailUrl}
+            alt="thumbnail"
+            css={{ borderRadius: 5 }}
+            height={130}
+            objectFit="cover"
+          />
+        </div>
         <Text h5>{data.title}</Text>
         <Row justify="space-evenly">
           <Row justify="center">
