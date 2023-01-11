@@ -1,5 +1,6 @@
 "use client";
 import { Container, Loading, Row, Text } from "@nextui-org/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "../axios";
@@ -40,13 +41,13 @@ export function PopularMusic() {
       ) : (
         <Row>
           {popularMusic.map((artwork) => (
-            <div
+            <Link
               key={artwork.id}
               style={{ marginRight: 20, marginBottom: 20 }}
-              onClick={() => router.replace(`artworks/${artwork.id}`)}
+              href={`artworks/${artwork.id}`}
             >
               <ArtworkCard data={artwork} userType="Spectator" />
-            </div>
+            </Link>
           ))}
         </Row>
       )}

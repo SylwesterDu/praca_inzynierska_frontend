@@ -13,16 +13,32 @@ import {
   StyledBadge,
   Tooltip,
 } from "@nextui-org/react";
-import user from "@nextui-org/react/types/user";
-import { Key } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Key, useEffect, useState } from "react";
+import { api } from "../../axios";
 
 type Report = {
-  title: string;
-  reason: string;
-  id: string;
+  reportId: string;
+  artworkTitle: string;
+  artworkId: string;
+  reportReason: string;
+  createdAt: string;
 };
 
 export default function Page() {
+  const router = useRouter();
+  const [reports, setReports] = useState<Report[]>([]);
+
+  async function getReports() {
+    const response = await api.get("report");
+    setReports(response.data);
+  }
+
+  useEffect(() => {
+    getReports();
+  }, []);
+
   const columns = [
     {
       key: "title",
@@ -37,36 +53,28 @@ export default function Page() {
       label: "Akcje do wykonania",
     },
   ];
-  const rows: Report[] = [
-    {
-      title: "title1",
-      id: "345345",
-      reason: "prawa autorskie",
-    },
-    {
-      title: "title1",
-      id: "345345",
-      reason: "prawa autorskie",
-    },
-    {
-      title: "title1",
-      id: "345345",
-      reason: "prawa autorskie",
-    },
-    {
-      title: "title1",
-      id: "345345",
-      reason: "prawa autorskie",
-    },
-  ];
+
+  async function deleteArtwork(artworkId: string) {
+    await api.delete(`artwork/${artworkId}`);
+    getReports();
+  }
+
+  async function deleteReport(reportId: string) {
+    await api.delete(`report/${reportId}`);
+    getReports();
+  }
 
   const renderCell = (item: Report, columnKey: Key) => {
     const cellValue = item[columnKey as keyof Report];
     switch (columnKey) {
       case "title":
-        return <Text>{item.title}</Text>;
+        return (
+          <Button light as={Link} href={`artworks/${item.artworkId}`}>
+            {item.artworkTitle}
+          </Button>
+        );
       case "reason":
-        return <Text>{item.reason}</Text>;
+        return <Text>{item.reportReason}</Text>;
 
       case "actions":
         return (
@@ -77,12 +85,32 @@ export default function Page() {
               placeItems: "center",
             }}
           >
-            <Row css={{ width: 160 }} align="flex-end">
-              <Button light color="warning" size="xs">
+            <Row align="flex-end">
+              <Button
+                light
+                color="secondary"
+                size="sm"
+                as={Link}
+                href={`artworks/${item.artworkId}/edit`}
+              >
                 Edytuj
               </Button>
-              <Button light color="error" size="xs">
-                Usuń
+              <Button
+                light
+                color="error"
+                size="sm"
+                onClick={() => deleteArtwork(item.artworkId)}
+              >
+                Usuń dzieło
+              </Button>
+
+              <Button
+                light
+                color="warning"
+                size="sm"
+                onClick={() => deleteReport(item.reportId)}
+              >
+                Usuń zgłoszenie
               </Button>
             </Row>
           </div>
@@ -100,35 +128,32 @@ export default function Page() {
     >
       <Container>
         <Text h2>Zgłoszone dzieła</Text>
-        <Card>
-          <Card.Body>
-            <Table
-              striped
-              aria-label="Example table with dynamic content"
-              css={{
-                height: "auto",
-                minWidth: "100%",
-              }}
-            >
-              <Table.Header columns={columns}>
-                {(column) => (
-                  <Table.Column width={600} key={column.key}>
-                    <Text css={{ textAlign: "center" }}>{column.label}</Text>
-                  </Table.Column>
+
+        <Table
+          striped
+          aria-label="Example table with dynamic content"
+          css={{
+            height: "auto",
+            minWidth: "100%",
+          }}
+        >
+          <Table.Header columns={columns}>
+            {(column) => (
+              <Table.Column width={600} key={column.key}>
+                <Text css={{ textAlign: "center" }}>{column.label}</Text>
+              </Table.Column>
+            )}
+          </Table.Header>
+          <Table.Body items={reports}>
+            {(item) => (
+              <Table.Row key={item.reportId}>
+                {(columnKey) => (
+                  <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>
                 )}
-              </Table.Header>
-              <Table.Body items={rows}>
-                {(item) => (
-                  <Table.Row key={item.title}>
-                    {(columnKey) => (
-                      <Table.Cell>{renderCell(item, columnKey)}</Table.Cell>
-                    )}
-                  </Table.Row>
-                )}
-              </Table.Body>
-            </Table>
-          </Card.Body>
-        </Card>
+              </Table.Row>
+            )}
+          </Table.Body>
+        </Table>
       </Container>
     </Container>
   );

@@ -8,6 +8,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Card, Dropdown, Image, Row, Text } from "@nextui-org/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createRef, useEffect, useState } from "react";
 import { api } from "../axios";
@@ -25,7 +26,6 @@ export function ArtworkCard({
   const router = useRouter();
 
   const [thumbnailUrl, setThumbnailUrl] = useState(data.thumbnailUrl);
-  console.log(data.artType);
 
   useEffect(() => {
     if (data.artType == 0) {
@@ -87,12 +87,7 @@ export function ArtworkCard({
           </Dropdown.Button>
           <Dropdown.Menu css={{ $$dropdownMenuWidth: "200px" }}>
             <Dropdown.Item key="new">
-              <Button
-                onClick={() => {
-                  router.replace(`artworks/${data.id}/edit`);
-                }}
-                light
-              >
+              <Button as={Link} href={`artworks/${data.id}/edit`} light>
                 Edytuj
               </Button>
             </Dropdown.Item>

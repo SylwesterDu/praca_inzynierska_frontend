@@ -21,7 +21,7 @@ type LoginValues = {
 export default function Page() {
   const router = useRouter();
 
-  const { user, login, logout } = useAuth();
+  const { login, logout } = useAuth();
 
   async function tryLogin(values: LoginValues) {
     const response = await api.post("auth/login", {

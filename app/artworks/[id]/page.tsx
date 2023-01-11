@@ -22,6 +22,8 @@ import {
   Dropdown,
   Input,
 } from "@nextui-org/react";
+import { Form, Formik } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Plyr from "plyr-react";
 import "plyr-react/plyr.css";
@@ -89,6 +91,14 @@ export default function Page({ params }: any) {
     getArtworkDetails();
   }
 
+  async function reportArtwork({ reportReason }: { reportReason: string }) {
+    console.log(params.id);
+    const response = await api.post(`artwork/${params.id}/report`, {
+      reportReason: reportReason,
+    });
+    setShowModal(false);
+  }
+
   return (
     <>
       <Modal
@@ -99,85 +109,107 @@ export default function Page({ params }: any) {
           setShowModal(false);
         }}
       >
-        <Modal.Header>
-          <Text id="modal-title" size={18}>
-            Zgłoś tę pracę
-          </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <Col>
-            <Text>Podaj powód zgłoszenia</Text>
-            <Dropdown>
-              <Dropdown.Button flat css={{ width: "100%" }}>
-                {showCustomReportReason ? "Inne" : reportReason}
-              </Dropdown.Button>
-              <Dropdown.Menu css={{ $$dropdownMenuWidth: "400px" }}>
-                <Dropdown.Item key="caytegory">
-                  <Button
-                    light
-                    onClick={() => {
-                      setReportReason("Zła kategoria");
-                      setShowCustomReportReason(false);
-                    }}
-                  >
-                    Zła kategoria
-                  </Button>
-                </Dropdown.Item>
-                <Dropdown.Item key="copyright">
-                  <Button
-                    light
-                    onClick={() => {
-                      setReportReason("Prawa autorskie");
-                      setShowCustomReportReason(false);
-                    }}
-                  >
-                    Prawa autorskie
-                  </Button>
-                </Dropdown.Item>
-                <Dropdown.Item key="edit">
-                  <Button
-                    light
-                    onClick={() => {
-                      setReportReason("Treść nieodpowiednia dla dzieci");
-                      setShowCustomReportReason(false);
-                    }}
-                  >
-                    Treść nieodpowiednia dla dzieci
-                  </Button>
-                </Dropdown.Item>
-                <Dropdown.Item key="other">
-                  <Button light onClick={() => setShowCustomReportReason(true)}>
-                    Inne
-                  </Button>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+        <Formik
+          initialValues={{ reportReason: "Zła kategoria" }}
+          onSubmit={reportArtwork}
+        >
+          {({ setFieldValue, values }) => (
+            <Form>
+              <Modal.Header>
+                <Text id="modal-title" size={18}>
+                  Zgłoś tę pracę
+                </Text>
+              </Modal.Header>
+              <Modal.Body>
+                <Col>
+                  <Text>Podaj powód zgłoszenia</Text>
+                  <Dropdown>
+                    <Dropdown.Button flat css={{ width: "100%" }}>
+                      {showCustomReportReason ? "Inne" : reportReason}
+                    </Dropdown.Button>
+                    <Dropdown.Menu css={{ $$dropdownMenuWidth: "400px" }}>
+                      <Dropdown.Item key="caytegory">
+                        <Button
+                          light
+                          onClick={() => {
+                            setReportReason("Zła kategoria");
+                            setFieldValue("reportReason", "Zła kategoria");
+                            setShowCustomReportReason(false);
+                          }}
+                        >
+                          Zła kategoria
+                        </Button>
+                      </Dropdown.Item>
+                      <Dropdown.Item key="copyright">
+                        <Button
+                          light
+                          onClick={() => {
+                            setReportReason("Prawa autorskie");
+                            setFieldValue("reportReason", "Prawa autorskie");
 
-            {showCustomReportReason && (
-              <>
-                <Spacer y={1} />
-                <Input
-                  fullWidth
-                  bordered
-                  borderWeight="light"
-                  placeholder="Wpisz powód zgłoszenia"
-                />
-              </>
-            )}
-          </Col>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            css={{ width: "100%" }}
-            color="success"
-            onPress={() => setShowModal(false)}
-          >
-            Wyślij
-          </Button>
-          <Button css={{ width: "100%" }} onPress={() => setShowModal(false)}>
-            Zamknij
-          </Button>
-        </Modal.Footer>
+                            setShowCustomReportReason(false);
+                          }}
+                        >
+                          Prawa autorskie
+                        </Button>
+                      </Dropdown.Item>
+                      <Dropdown.Item key="edit">
+                        <Button
+                          light
+                          onClick={() => {
+                            setReportReason("Treść nieodpowiednia dla dzieci");
+                            setFieldValue(
+                              "reportReason",
+                              "Treść nieodpowiednia dla dzieci"
+                            );
+
+                            setShowCustomReportReason(false);
+                          }}
+                        >
+                          Treść nieodpowiednia dla dzieci
+                        </Button>
+                      </Dropdown.Item>
+                      <Dropdown.Item key="other">
+                        <Button
+                          light
+                          onClick={() => setShowCustomReportReason(true)}
+                        >
+                          Inne
+                        </Button>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+
+                  {showCustomReportReason && (
+                    <>
+                      <Spacer y={1} />
+                      <Input
+                        fullWidth
+                        bordered
+                        borderWeight="light"
+                        placeholder="Wpisz powód zgłoszenia"
+                        onChange={(e) =>
+                          setFieldValue("reportReason", e.target.value)
+                        }
+                      />
+                    </>
+                  )}
+                </Col>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button css={{ width: "100%" }} color="success" type="submit">
+                  Wyślij
+                </Button>
+                <Button
+                  css={{ width: "100%" }}
+                  onPress={() => setShowModal(false)}
+                >
+                  Zamknij
+                </Button>
+              </Modal.Footer>
+            </Form>
+          )}
+        </Formik>
       </Modal>
       <Container>
         <Grid.Container gap={1}>
@@ -307,15 +339,13 @@ export default function Page({ params }: any) {
         <Collapse title="Inne prace tego użytkownika" bordered>
           <Row wrap="wrap">
             {otherArtworks.map((artwork) => (
-              <div
+              <Link
                 key={artwork.id}
                 style={{ marginRight: 20 }}
-                onClick={() => {
-                  router.replace(`artworks/${artwork.id}`);
-                }}
+                href={`artworks/${artwork.id}`}
               >
                 <ArtworkCard data={artwork} userType="Spectator" />
-              </div>
+              </Link>
             ))}
           </Row>
         </Collapse>
