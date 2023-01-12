@@ -25,7 +25,7 @@ export default function Page() {
   const { userData } = useAuth();
 
   const [username, setUsername] = useState<string>("");
-  const [currentMenuOption, setCurrentMenuOption] = useState<number>(1);
+  const [currentMenuOption, setCurrentMenuOption] = useState<number>(2);
 
   async function getUserData() {
     const repsonse = await api.get("user");

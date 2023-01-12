@@ -99,7 +99,6 @@ export function TopBar() {
       <Formik initialValues={initialSearchParams} onSubmit={search}>
         {({ setFieldValue, values }) => (
           <Form>
-            {/* {showSearchPanel && ( */}
             <Card
               css={{
                 position: "absolute",
@@ -216,7 +215,6 @@ export function TopBar() {
                 </Grid.Container>
               </Card.Body>
             </Card>
-            {/* )} */}
             <Navbar
               isBordered
               variant="floating"
