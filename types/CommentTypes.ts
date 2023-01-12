@@ -5,3 +5,7 @@ export type Comment = {
   creatorName: string;
   creatorId: string;
 };
+
+export type AddComment = {
+  content: string;
+};

@@ -25,12 +25,7 @@ export function MyArtworks() {
       <Container>
         <Row justify="space-between">
           <Text h2>Moje dzieła</Text>
-          <Button
-            color="gradient"
-            onClick={() => {
-              router.replace("artworks/upload");
-            }}
-          >
+          <Button as={Link} color="gradient" href="artworks/upload">
             Dodaj
           </Button>
         </Row>

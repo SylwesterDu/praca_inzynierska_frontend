@@ -20,15 +20,13 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../AuthContext";
 import { api } from "../axios";
 
-type Comment = {
-  content: string;
-};
+import { AddComment, Comment } from "./../types/CommentTypes";
 
 export function Comments({ artworkId }: { artworkId: string }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [comment, setComment] = useState("");
   const [expanded, setExpanded] = useState(false);
-  const { user } = useAuth();
+  const { userData } = useAuth();
 
   async function getComments() {
     const response = await api.get(`artwork/${artworkId}/comments`);
@@ -41,7 +39,7 @@ export function Comments({ artworkId }: { artworkId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function addComment(values: Comment) {
+  async function addComment(values: AddComment) {
     if (values.content.length == 0) {
       return;
     }
@@ -53,7 +51,7 @@ export function Comments({ artworkId }: { artworkId: string }) {
 
   return (
     <Collapse title="Komentarze" shadow expanded={expanded}>
-      {user && (
+      {userData && (
         <>
           <Spacer y={0.5} />
           <Container>

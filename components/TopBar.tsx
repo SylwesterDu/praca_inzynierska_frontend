@@ -15,23 +15,19 @@ import {
 import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createRef, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { api } from "../axios";
 import { useAuth } from "../AuthContext";
 import Link from "next/link";
 import { Form, Formik } from "formik";
-
-type SearchParams = {
-  query: string;
-  category?: number;
-  genre?: string;
-  tags?: string[];
-};
+import { SearchParams } from "../types/SearchTypes";
 
 export function TopBar() {
+  const router = useRouter();
+  const pathName = usePathname();
   const { logged, userData, login, logout, getUserData } = useAuth();
-  const [showSearchPanel, setShowSearchPanel] = useState<boolean>(true);
-  const [searchCategory, setSearchCategory] = useState<number | null>(null);
+  const [showSearchPanel, setShowSearchPanel] = useState<boolean>(false);
+  const [searchartType, setSearchArtType] = useState<number | null>(null);
 
   const searchButton = createRef<FormElement>();
 
@@ -74,12 +70,28 @@ export function TopBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    toggleSearch(false);
+  }, [pathName]);
+
   const initialSearchParams: SearchParams = {
     query: "",
   };
 
   function search(params: SearchParams) {
-    console.log(params);
+    toggleSearch(false);
+    const urlSearchParams = new URLSearchParams();
+    urlSearchParams.append("query", params.query);
+    if (params.artType != null) {
+      urlSearchParams.append("artType", params.artType!.toString());
+    }
+    if (params.genre) {
+      urlSearchParams.append("genre", params.genre);
+    }
+    if (params.tags) {
+      urlSearchParams.append("tags", `${params.tags.join(" ")}`);
+    }
+    router.replace(`search?${urlSearchParams.toString()}`);
   }
 
   return (
@@ -87,121 +99,124 @@ export function TopBar() {
       <Formik initialValues={initialSearchParams} onSubmit={search}>
         {({ setFieldValue, values }) => (
           <Form>
-            {showSearchPanel && (
-              <Card
-                css={{
-                  position: "absolute",
-                  top: 100,
-                  margin: " 0 70px",
-                  width: "calc(100% - 140px)",
-                  zIndex: 1,
-                }}
-              >
-                <Card.Body css={{ position: "relative" }}>
-                  <Text h3>Co chcesz wyszukać?</Text>
-                  <FontAwesomeIcon
-                    onClick={() => toggleSearch(false)}
-                    style={{
-                      position: "absolute",
-                      top: 20,
-                      right: 20,
-                      cursor: "pointer",
-                    }}
-                    icon={faXmark}
-                  />
-                  <Grid.Container alignContent="center" alignItems="center">
-                    <Grid xs={3}>
-                      <Text size="sm">Wybierz kategorię:</Text>
-                    </Grid>
-                    <Grid xs={9}>
-                      <Button.Group color="gradient" ghost>
-                        <Button
-                          onClick={() => {
-                            setSearchCategory(null),
-                              setFieldValue("category", null);
-                          }}
-                        >
-                          Brak
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setSearchCategory(0), setFieldValue("category", 0);
-                          }}
-                        >
-                          Muzyka
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setSearchCategory(1), setFieldValue("category", 1);
-                          }}
-                        >
-                          Literatura
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setSearchCategory(2), setFieldValue("category", 2);
-                          }}
-                        >
-                          Fotografia
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setSearchCategory(3), setFieldValue("category", 3);
-                          }}
-                        >
-                          Inne
-                        </Button>
-                      </Button.Group>
-                    </Grid>
+            {/* {showSearchPanel && ( */}
+            <Card
+              css={{
+                position: "absolute",
+                top: 100,
+                margin: " 0 70px",
+                width: "calc(100% - 140px)",
+                zIndex: 1,
+                display: showSearchPanel ? "block" : "none",
+              }}
+            >
+              <Card.Body css={{ position: "relative" }}>
+                <Text h3>Co chcesz wyszukać?</Text>
+                <FontAwesomeIcon
+                  onClick={() => toggleSearch(false)}
+                  style={{
+                    position: "absolute",
+                    top: 20,
+                    right: 20,
+                    cursor: "pointer",
+                  }}
+                  icon={faXmark}
+                />
+                <Grid.Container alignContent="center" alignItems="center">
+                  <Grid xs={3}>
+                    <Text size="sm">Wybierz kategorię:</Text>
+                  </Grid>
+                  <Grid xs={9}>
+                    <Button.Group color="gradient" ghost>
+                      <Button
+                        onClick={() => {
+                          setSearchArtType(null);
+                          setFieldValue("artType", null);
+                        }}
+                      >
+                        Brak
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setSearchArtType(0);
+                          setFieldValue("artType", 0);
+                        }}
+                      >
+                        Muzyka
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setSearchArtType(1);
+                          setFieldValue("artType", 1);
+                        }}
+                      >
+                        Literatura
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setSearchArtType(2);
+                          setFieldValue("artType", 2);
+                        }}
+                      >
+                        Fotografia
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setSearchArtType(3);
+                          setFieldValue("artType", 3);
+                        }}
+                      >
+                        Inne
+                      </Button>
+                    </Button.Group>
+                  </Grid>
 
-                    {searchCategory != null && (
-                      <>
-                        <Grid xs={3}>
-                          <Text size="sm">Wybierz gatunek:</Text>
-                        </Grid>
-                        <Grid xs={9}>
-                          <Button.Group color="gradient" ghost>
+                  {searchartType != null && (
+                    <>
+                      <Grid xs={3}>
+                        <Text size="sm">Wybierz gatunek:</Text>
+                      </Grid>
+                      <Grid xs={9}>
+                        <Button.Group color="gradient" ghost>
+                          <Button onClick={() => setFieldValue("genre", null)}>
+                            Brak
+                          </Button>
+                          {genres[searchartType].map((genre) => (
                             <Button
-                              onClick={() => setFieldValue("genre", null)}
+                              key={genre}
+                              onClick={() => setFieldValue("genre", genre)}
                             >
-                              Brak
+                              {genre}
                             </Button>
-                            {genres[searchCategory].map((genre) => (
-                              <Button
-                                key={genre}
-                                onClick={() => setFieldValue("genre", genre)}
-                              >
-                                {genre}
-                              </Button>
-                            ))}
-                          </Button.Group>
-                        </Grid>
-                      </>
-                    )}
-                    <Grid xs={3}>
-                      <Text size="sm">Wpisz tagi</Text>
-                    </Grid>
-                    <Grid xs={4}>
-                      <Spacer x={0.2} />
-                      <Input
-                        bordered
-                        borderWeight="light"
-                        fullWidth
-                        placeholder="Wpisz listę #tagów"
-                        onChange={(e) =>
-                          setFieldValue(
-                            "tags",
-                            e.target.value
-                              .split(" ")
-                              .map((tag) => tag.replace("#", ""))
-                          )
-                        }
-                      />
-                    </Grid>
-                  </Grid.Container>
-                </Card.Body>
-              </Card>
-            )}
+                          ))}
+                        </Button.Group>
+                      </Grid>
+                    </>
+                  )}
+                  <Grid xs={3}>
+                    <Text size="sm">Wpisz tagi</Text>
+                  </Grid>
+                  <Grid xs={4}>
+                    <Spacer x={0.2} />
+                    <Input
+                      bordered
+                      borderWeight="light"
+                      fullWidth
+                      placeholder="Wpisz listę #tagów"
+                      onChange={(e) =>
+                        setFieldValue(
+                          "tags",
+                          e.target.value
+                            .split(" ")
+                            .map((tag) => tag.replace("#", ""))
+                        )
+                      }
+                    />
+                  </Grid>
+                </Grid.Container>
+              </Card.Body>
+            </Card>
+            {/* )} */}
             <Navbar
               isBordered
               variant="floating"
@@ -211,7 +226,10 @@ export function TopBar() {
                 <Link aria-label="logo" href="/">
                   <Text
                     size="$lg"
-                    css={{ cursor: "pointer" }}
+                    css={{
+                      textGradient: "45deg, $blue600 -20%, $pink600 80%",
+                      cursor: "pointer",
+                    }}
                     b
                     color="inherit"
                     hideIn="xs"
@@ -228,6 +246,9 @@ export function TopBar() {
                 ></Button>
                 <Input
                   onClick={() => toggleSearch(true)}
+                  onChange={(e) => {
+                    setFieldValue("query", e.target.value);
+                  }}
                   css={{ minWidth: 400 }}
                   placeholder="Wyszukaj"
                   fullWidth
@@ -251,7 +272,11 @@ export function TopBar() {
                       <Link href="login">Zaloguj się</Link>
                     </Navbar.Item>
                     <Navbar.Item>
-                      <Button aria-label="Zarejestruj się" href="register">
+                      <Button
+                        as={Link}
+                        aria-label="Zarejestruj się"
+                        href="register"
+                      >
                         Załóż konto
                       </Button>
                     </Navbar.Item>
@@ -275,21 +300,26 @@ export function TopBar() {
                         </Button>
                       </Dropdown.Item>
 
-                      {userData.roles.includes("admin") && (
-                        <Dropdown.Item key="admin-panel">
-                          <Button
-                            as={Link}
-                            aria-label="panel administratorski"
-                            light
-                            href={"admin"}
-                          >
-                            Panel administratorski
-                          </Button>
-                        </Dropdown.Item>
-                      )}
-                      <Dropdown.Item key="logout" withDivider color="error">
+                      <Dropdown.Item
+                        css={{
+                          display: userData.roles.includes("admin")
+                            ? "block"
+                            : "none",
+                        }}
+                        key="admin-panel"
+                      >
                         <Button
                           as={Link}
+                          aria-label="panel administratorski"
+                          light
+                          href={"admin"}
+                        >
+                          Panel administratorski
+                        </Button>
+                      </Dropdown.Item>
+                      <Dropdown.Item key="logout" withDivider color="error">
+                        <Button
+                          onClick={logout}
                           aria-label="moje konto"
                           light
                           href="account"
