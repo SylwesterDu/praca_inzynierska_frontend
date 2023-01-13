@@ -330,6 +330,17 @@ export default function Page({ params }: any) {
                   <Text size="$sm" color="grey">
                     {artworkDetails?.views} wyświetleń.
                   </Text>
+                  <Button
+                    ghost
+                    as={Link}
+                    href={`user/${artworkDetails?.owner.id}`}
+                    borderWeight="light"
+                    color="gradient"
+                    css={{ width: "100%" }}
+                  >
+                    Przejdź do profilu użytkownika{" "}
+                    {artworkDetails?.owner.username}
+                  </Button>
                 </Col>
               </Card.Footer>
             </Card>

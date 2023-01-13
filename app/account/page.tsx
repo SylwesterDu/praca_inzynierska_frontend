@@ -6,10 +6,10 @@ import {
   Row,
   Spacer,
   Button,
-  Link,
   Container,
   Image,
 } from "@nextui-org/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../AuthContext";
@@ -25,7 +25,7 @@ export default function Page() {
   const { userData } = useAuth();
 
   const [username, setUsername] = useState<string>("");
-  const [currentMenuOption, setCurrentMenuOption] = useState<number>(2);
+  const [currentMenuOption, setCurrentMenuOption] = useState<number>(3);
 
   async function getUserData() {
     const repsonse = await api.get("user");
@@ -54,6 +54,7 @@ export default function Page() {
               }
               alt="avatar"
               objectFit="cover"
+              css={{ borderRadius: 10 }}
             />
             <Text h3 css={{ textAlign: "center" }}>
               {userData.username}
@@ -61,12 +62,13 @@ export default function Page() {
 
             <nav>
               <Button
+                as={Link}
                 size="md"
-                flat={currentMenuOption != 0}
+                href={`user/${userData.id}`}
+                flat
                 css={{ width: "100%" }}
-                onClick={() => setCurrentMenuOption(0)}
               >
-                Strona główna
+                Strona mojego profilu
               </Button>
               <Spacer y={4} />
 

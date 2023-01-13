@@ -284,7 +284,10 @@ export function TopBar() {
                 <>
                   <Dropdown>
                     <Dropdown.Trigger css={{ cursor: "pointer" }}>
-                      <User src="" name={userData.username}></User>
+                      <User
+                        src={userData.avatar}
+                        name={userData.username}
+                      ></User>
                     </Dropdown.Trigger>
                     <Dropdown.Menu>
                       <Dropdown.Item key="account">

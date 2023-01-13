@@ -8,11 +8,11 @@ import {
 } from "react";
 import { api } from "./axios";
 
-import { User } from "./types/UserTypes";
+import { LoggedUser } from "./types/UserTypes";
 
 type AuthContextType = {
   logged: boolean;
-  userData: User;
+  userData: LoggedUser;
   login: () => void;
   logout: () => void;
   getUserData: () => void;
@@ -39,7 +39,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [logged, setLogged] = useState<boolean>(false);
-  const [userData, setUserData] = useState<User>({
+  const [userData, setUserData] = useState<LoggedUser>({
     id: "",
     username: "",
     avatar: "",

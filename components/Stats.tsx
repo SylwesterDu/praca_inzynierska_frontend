@@ -1,4 +1,6 @@
 "use client";
+import { faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Badge,
   Card,
@@ -11,9 +13,68 @@ import {
   Text,
   Tooltip,
 } from "@nextui-org/react";
+import { useEffect, useMemo, useState } from "react";
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { api } from "../axios";
+import { UserStats } from "../types/UserTypes";
 
 export function Stats() {
+  const [stats, setStats] = useState<UserStats>({
+    artworksCommentsCount: [
+      { artType: 0, count: 0 },
+      { artType: 1, count: 0 },
+      { artType: 2, count: 0 },
+      { artType: 3, count: 0 },
+    ],
+    artworksViewsCount: [
+      { artType: 0, count: 0 },
+      { artType: 1, count: 0 },
+      { artType: 2, count: 0 },
+      { artType: 3, count: 0 },
+    ],
+    artworksCount: [
+      { artType: 0, count: 0 },
+      { artType: 1, count: 0 },
+      { artType: 2, count: 0 },
+      { artType: 3, count: 0 },
+    ],
+    votes: { upvotes: 0, downvotes: 0 },
+  });
+
+  function artTypeToName(artType: number) {
+    if (artType == 0) {
+      return "Muzyka";
+    }
+    if (artType == 1) {
+      return "Literatura";
+    }
+    if (artType == 2) {
+      return "Fotografia";
+    }
+    return "Inne";
+  }
+
+  const ratio = useMemo(() => {
+    const ratio =
+      stats.votes.upvotes / (stats.votes.upvotes + stats.votes.downvotes);
+    if (isNaN(ratio) || ratio == Infinity) {
+      return 0;
+    }
+    return ratio * 100;
+  }, [stats.votes]);
+
+  // const ratio = 30;
+
+  async function getUserStats() {
+    const response = await api.get("user/stats");
+
+    setStats(response.data);
+  }
+
+  useEffect(() => {
+    getUserStats();
+  }, []);
+
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
@@ -49,13 +110,6 @@ export function Stats() {
     );
   };
 
-  const percentage = [
-    { name: "Muzyka", value: 10 },
-    { name: "Literatura", value: 3 },
-    { name: "Fotografia", value: 1 },
-    { name: "Inne", value: 4 },
-  ];
-
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   return (
@@ -69,19 +123,19 @@ export function Stats() {
             </Card.Header>
             <Card.Body>
               <Row align="center">
-                <ResponsiveContainer width={230} height={200}>
+                <ResponsiveContainer width={230} height={180}>
                   <PieChart>
                     <Pie
-                      data={percentage}
+                      data={stats.artworksCount}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
                       label={renderCustomizedLabel}
                       outerRadius={80}
                       fill="#8884d8"
-                      dataKey="value"
+                      dataKey="count"
                     >
-                      {percentage.map((entry, index) => (
+                      {stats.artworksCount.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={COLORS[index % COLORS.length]}
@@ -92,45 +146,18 @@ export function Stats() {
                 </ResponsiveContainer>
                 <Col>
                   <Grid.Container gap={0.5}>
-                    <Grid xs={12} alignItems="center">
-                      <Badge
-                        variant="dot"
-                        css={{ backgroundColor: COLORS[0] }}
-                      />
-                      <Text css={{ ml: "$2" }}>
-                        Muzyka ({percentage[0].value})
-                      </Text>
-                    </Grid>
-                    <Grid xs={12} alignItems="center">
-                      <Badge
-                        color="primary"
-                        variant="dot"
-                        css={{ backgroundColor: COLORS[1] }}
-                      />
-                      <Text css={{ ml: "$2" }}>
-                        Literatura ({percentage[1].value})
-                      </Text>
-                    </Grid>
-                    <Grid xs={12} alignItems="center">
-                      <Badge
-                        color="secondary"
-                        variant="dot"
-                        css={{ backgroundColor: COLORS[2] }}
-                      />
-                      <Text css={{ ml: "$2" }}>
-                        Fotografia ({percentage[2].value})
-                      </Text>
-                    </Grid>
-                    <Grid xs={12} alignItems="center">
-                      <Badge
-                        color="success"
-                        variant="dot"
-                        css={{ backgroundColor: COLORS[3] }}
-                      />
-                      <Text css={{ ml: "$2" }}>
-                        Inne ({percentage[3].value})
-                      </Text>
-                    </Grid>
+                    {stats.artworksCount.map((count, index) => (
+                      <Grid key={index} xs={12} alignItems="center">
+                        <Badge
+                          variant="dot"
+                          css={{ backgroundColor: COLORS[index] }}
+                        />
+                        <Text css={{ ml: "$2" }}>
+                          {artTypeToName(count.artType)} (
+                          {stats.artworksCount[index].count})
+                        </Text>
+                      </Grid>
+                    ))}
                   </Grid.Container>
                 </Col>
               </Row>
@@ -144,8 +171,29 @@ export function Stats() {
             </Card.Header>
             <Card.Body>
               <Container>
-                <Progress value={70} shadow color="success" status="error" />
-                <Spacer y={2} />
+                <Row align="center">
+                  <FontAwesomeIcon
+                    color="green"
+                    style={{ fontSize: 27 }}
+                    icon={faThumbsUp}
+                  />
+                  <Spacer x={1} />
+                  <Progress
+                    value={ratio}
+                    shadow
+                    color="success"
+                    status="error"
+                  />
+                  <Spacer x={1} />
+
+                  <FontAwesomeIcon
+                    color="red"
+                    style={{ fontSize: 27 }}
+                    icon={faThumbsDown}
+                  />
+                </Row>
+
+                <Spacer y={1} />
                 <Text size="$xl">
                   Twoje dzieła podobają się{" "}
                   <Text
@@ -156,26 +204,142 @@ export function Stats() {
                       textGradient: "45deg, $blue600 -20%, $pink600 80%",
                     }}
                   >
-                    70%
+                    {ratio}%
                   </Text>{" "}
                   widzów.
+                </Text>
+
+                <Text size="$xl">
+                  Otrzymaleś{" "}
+                  <Text
+                    span
+                    size="$2xl"
+                    weight="bold"
+                    css={{
+                      textGradient: "45deg, $blue600 -20%, $pink600 80%",
+                    }}
+                  >
+                    {stats.votes.upvotes}
+                  </Text>{" "}
+                  <Text span color="success">
+                    pozytywnych
+                  </Text>{" "}
+                  recenzji,
+                </Text>
+                <Text size="$xl">
+                  oraz{" "}
+                  <Text
+                    span
+                    size="$2xl"
+                    weight="bold"
+                    css={{
+                      textGradient: "45deg, $blue600 -20%, $pink600 80%",
+                    }}
+                  >
+                    {stats.votes.downvotes}
+                  </Text>{" "}
+                  <Text span color="error">
+                    negatywnych.
+                  </Text>{" "}
                 </Text>
               </Container>
             </Card.Body>
           </Card>
         </Grid>
-        <Grid xs={6}>
+        <Grid xs={12} md={6}>
           <Card>
             <Card.Header>
               <Text h3>Ilość wyświetleń</Text>
             </Card.Header>
+            <Card.Body>
+              <Row align="center">
+                <ResponsiveContainer width={230} height={180}>
+                  <PieChart>
+                    <Pie
+                      data={stats.artworksViewsCount}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="count"
+                    >
+                      {stats.artworksViewsCount.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                <Col>
+                  <Grid.Container gap={0.5}>
+                    {stats.artworksViewsCount.map((count, index) => (
+                      <Grid key={index} xs={12} alignItems="center">
+                        <Badge
+                          variant="dot"
+                          css={{ backgroundColor: COLORS[index] }}
+                        />
+                        <Text css={{ ml: "$2" }}>
+                          {artTypeToName(count.artType)} (
+                          {stats.artworksViewsCount[index].count})
+                        </Text>
+                      </Grid>
+                    ))}
+                  </Grid.Container>
+                </Col>
+              </Row>
+            </Card.Body>
           </Card>
         </Grid>
-        <Grid xs={6}>
+        <Grid xs={12} md={6}>
           <Card>
             <Card.Header>
-              <Text h3> Procentowy udział twoich dzieł</Text>
+              <Text h3> Procentowy udział komentarzy</Text>
             </Card.Header>
+            <Card.Body>
+              <Row align="center">
+                <ResponsiveContainer width={230} height={180}>
+                  <PieChart>
+                    <Pie
+                      data={stats.artworksCommentsCount}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={renderCustomizedLabel}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="count"
+                    >
+                      {stats.artworksCommentsCount.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                <Col>
+                  <Grid.Container gap={0.5}>
+                    {stats.artworksCommentsCount.map((count, index) => (
+                      <Grid key={index} xs={12} alignItems="center">
+                        <Badge
+                          variant="dot"
+                          css={{ backgroundColor: COLORS[index] }}
+                        />
+                        <Text css={{ ml: "$2" }}>
+                          {artTypeToName(count.artType)} (
+                          {stats.artworksCommentsCount[index].count})
+                        </Text>
+                      </Grid>
+                    ))}
+                  </Grid.Container>
+                </Col>
+              </Row>
+            </Card.Body>
           </Card>
         </Grid>
       </Grid.Container>
