@@ -33,6 +33,7 @@ import { useEffect, useMemo, useState } from "react";
 import { api } from "../../../axios";
 import { ArtworkCard } from "../../../components/ArtworkCard";
 import { Comments } from "../../../components/Comments";
+import TextArtwork from "../../../components/TextArtwork";
 import { Artwork, ArtworkDetails } from "../../../types/ArtworkTypes";
 
 export default function Page({ params }: any) {
@@ -230,6 +231,9 @@ export default function Page({ params }: any) {
                   }}
                 ></Plyr>
               )}
+              {artworkDetails?.artType == 1 && (
+                <TextArtwork {...artworkDetails} />
+              )}
               {artworkDetails?.artType == 2 && (
                 <Image
                   src={artworkDetails.resourceUrls[0]}
@@ -350,13 +354,11 @@ export default function Page({ params }: any) {
         <Collapse title="Inne prace tego użytkownika" bordered>
           <Row wrap="wrap">
             {otherArtworks.map((artwork) => (
-              <Link
+              <ArtworkCard
                 key={artwork.id}
-                style={{ marginRight: 20 }}
-                href={`artworks/${artwork.id}`}
-              >
-                <ArtworkCard data={artwork} userType="Spectator" />
-              </Link>
+                data={artwork}
+                userType="Spectator"
+              />
             ))}
           </Row>
         </Collapse>

@@ -22,6 +22,7 @@ export default function Page() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [artType, setArtType] = useState<Key>(0);
+  const [acceptFiles, setAcceptFiles] = useState<string>("audio/*,vieo/*");
   const [genre, setGenre] = useState<Key>("");
   const [uploadProcessId, setUploadProcessId] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -71,6 +72,25 @@ export default function Page() {
   useEffect(() => {
     setGenre(genres[+artType][0]);
   }, [artType, genres]);
+
+  useEffect(() => {
+    if (artType == 0) {
+      setAcceptFiles("audio/*,video/*");
+      return;
+    }
+    if (artType == 1) {
+      setAcceptFiles("text/*,application/pdf");
+      return;
+    }
+    if (artType == 2) {
+      setAcceptFiles("image/*");
+      return;
+    }
+    if (artType == 3) {
+      setAcceptFiles("video/*,image/*");
+      return;
+    }
+  }, [artType]);
 
   function translate(artType: number) {
     switch (artType) {
@@ -282,6 +302,7 @@ export default function Page() {
                       <Input
                         aria-label="input file"
                         type="file"
+                        accept={acceptFiles}
                         hidden
                         ref={fileButton}
                         onChange={(e) => addFile(e)}

@@ -32,17 +32,12 @@ export function MyArtworks() {
         {artworks.length == 0 && <Text h3>Nie dodałeś żadnych dzieł.</Text>}
         <Row gap={0} wrap="wrap">
           {artworks.map((artwork) => (
-            <Link
+            <ArtworkCard
               key={artwork.id}
-              style={{ marginRight: 20, marginBottom: 20 }}
-              href={`artworks/${artwork.id}`}
-            >
-              <ArtworkCard
-                data={artwork}
-                userType="Owner"
-                refreshParent={getUserArtworks}
-              />
-            </Link>
+              data={artwork}
+              userType="Owner"
+              refreshParent={getUserArtworks}
+            />
           ))}
         </Row>
       </Container>

@@ -40,13 +40,7 @@ export function PopularPhotography() {
       ) : (
         <Row>
           {popularPhotography.map((artwork) => (
-            <Link
-              key={artwork.id}
-              style={{ marginRight: 20, marginBottom: 20 }}
-              href={`artworks/${artwork.id}`}
-            >
-              <ArtworkCard data={artwork} userType="Spectator" />
-            </Link>
+            <ArtworkCard key={artwork.id} data={artwork} userType="Spectator" />
           ))}
         </Row>
       )}

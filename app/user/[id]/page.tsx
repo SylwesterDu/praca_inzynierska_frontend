@@ -107,13 +107,11 @@ export default function Page({ params }: any) {
           <Text h3>Dodane dzieła:</Text>
           <Row>
             {artworks.map((artwork) => (
-              <Link
+              <ArtworkCard
                 key={artwork.id}
-                style={{ marginRight: 20, marginBottom: 20 }}
-                href={`artworks/${artwork.id}`}
-              >
-                <ArtworkCard data={artwork} userType="Spectator" />
-              </Link>
+                data={artwork}
+                userType="Spectator"
+              />
             ))}
           </Row>
         </Container>

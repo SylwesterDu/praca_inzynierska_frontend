@@ -47,39 +47,43 @@ export function ArtworkCard({
   }
 
   return (
-    <Card css={{ mw: 230, cursor: "pointer" }}>
-      <Card.Body>
-        <div style={{ height: 130 }}>
-          <Image
-            src={thumbnailUrl}
-            alt="thumbnail"
-            css={{ borderRadius: 5 }}
-            height={130}
-            objectFit="cover"
-          />
-        </div>
-        <Text h5>{data.title}</Text>
-        <Row justify="space-evenly">
-          <Row justify="center">
-            <FontAwesomeIcon
-              color="green"
-              style={{ fontSize: 27 }}
-              icon={faThumbsUp}
+    <Card
+      css={{ mw: 230, cursor: "pointer", marginRight: 20, marginBottom: 20 }}
+    >
+      <Link style={{}} href={`artworks/${data.id}`}>
+        <Card.Body>
+          <div style={{ height: 130 }}>
+            <Image
+              src={thumbnailUrl}
+              alt="thumbnail"
+              css={{ borderRadius: 5 }}
+              height={130}
+              objectFit="cover"
             />
-            <Text h4>&nbsp;{data.upvotes}</Text>
-          </Row>
+          </div>
+          <Text h5>{data.title}</Text>
+          <Row justify="space-evenly">
+            <Row justify="center">
+              <FontAwesomeIcon
+                color="green"
+                style={{ fontSize: 27 }}
+                icon={faThumbsUp}
+              />
+              <Text h4>&nbsp;{data.upvotes}</Text>
+            </Row>
 
-          <Row justify="center">
-            <FontAwesomeIcon
-              color="red"
-              style={{ fontSize: 27 }}
-              icon={faThumbsDown}
-            />
-            <Text h4>&nbsp;{data.downvotes}</Text>
+            <Row justify="center">
+              <FontAwesomeIcon
+                color="red"
+                style={{ fontSize: 27 }}
+                icon={faThumbsDown}
+              />
+              <Text h4>&nbsp;{data.downvotes}</Text>
+            </Row>
           </Row>
-        </Row>
-        <Text color="grey">{`${data.views} wyświetleń`}</Text>
-      </Card.Body>
+          <Text color="grey">{`${data.views} wyświetleń`}</Text>
+        </Card.Body>
+      </Link>
       {userType == "Owner" && (
         <Dropdown>
           <Dropdown.Button css={{ width: 230 }} flat>
