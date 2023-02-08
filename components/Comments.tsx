@@ -1,7 +1,9 @@
 "use client";
 
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as filledStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as outlinedStar } from "@fortawesome/free-regular-svg-icons";
+
 import {
   Button,
   Col,
@@ -22,16 +24,29 @@ import { api } from "../axios";
 
 import { AddComment, Comment } from "./../types/CommentTypes";
 
-export function Comments({ artworkId }: { artworkId: string }) {
+export function Comments({
+  artworkId,
+  setRating,
+}: {
+  artworkId: string;
+  setRating: any;
+}) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [comment, setComment] = useState("");
+  const [rate, setRate] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const { userData } = useAuth();
 
   async function getComments() {
     const response = await api.get(`artwork/${artworkId}/comments`);
-    setComments(response.data);
+    const comments: Comment[] = response.data;
+    setComments(comments);
     setExpanded(true);
+    const total = comments
+      .filter((comment) => comment.rating)
+      .reduce((a, b) => a + b.rating!, 0);
+    const count = comments.filter((comment) => comment.rating).length;
+    setRating(total / count);
   }
 
   useEffect(() => {
@@ -45,8 +60,25 @@ export function Comments({ artworkId }: { artworkId: string }) {
     }
     const response = await api.post(`artwork/${artworkId}/comment`, {
       content: values.content,
+      rating: values.rating,
     });
     getComments();
+  }
+
+  function printStars(rating?: number) {
+    let stars: any = [];
+    if (!rating) return null;
+    for (let i = 0; i < rating; i++) {
+      stars.push(
+        <FontAwesomeIcon
+          color="yellow"
+          style={{ fontSize: 12 }}
+          icon={filledStar}
+        />
+      );
+    }
+
+    return stars;
   }
 
   return (
@@ -73,13 +105,72 @@ export function Comments({ artworkId }: { artworkId: string }) {
                   />
                   <Spacer y={0.2} />
                   <Row align="flex-end" justify="flex-end">
-                    {comment.length > 0 ? (
-                      <Button bordered size="sm" type="submit">
-                        Dodaj
-                      </Button>
-                    ) : (
-                      <Spacer y={2} />
-                    )}
+                    <Row>
+                      <span
+                        onClick={() => {
+                          setRate(1);
+                          setFieldValue("rating", 1);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          color="gold"
+                          style={{ fontSize: 27 }}
+                          icon={rate >= 1 ? filledStar : outlinedStar}
+                        />
+                      </span>
+
+                      <span
+                        onClick={() => {
+                          setRate(2);
+                          setFieldValue("rating", 2);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          color="gold"
+                          style={{ fontSize: 27 }}
+                          icon={rate >= 2 ? filledStar : outlinedStar}
+                        />
+                      </span>
+                      <span
+                        onClick={() => {
+                          setRate(3);
+                          setFieldValue("rating", 3);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          color="gold"
+                          style={{ fontSize: 27 }}
+                          icon={rate >= 3 ? filledStar : outlinedStar}
+                        />
+                      </span>
+                      <span
+                        onClick={() => {
+                          setRate(4);
+                          setFieldValue("rating", 4);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          color="gold"
+                          style={{ fontSize: 27 }}
+                          icon={rate >= 4 ? filledStar : outlinedStar}
+                        />
+                      </span>
+                      <span
+                        onClick={() => {
+                          setRate(5);
+                          setFieldValue("rating", 5);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          color="gold"
+                          style={{ fontSize: 27 }}
+                          icon={rate >= 5 ? filledStar : outlinedStar}
+                        />
+                      </span>
+                    </Row>
+                    <Button bordered size="sm" type="submit">
+                      Dodaj
+                    </Button>
                   </Row>
                 </Form>
               )}
@@ -101,7 +192,9 @@ export function Comments({ artworkId }: { artworkId: string }) {
                       {new Date(comment.createdAt).toLocaleDateString()}
                       {"\t"}
                       {new Date(comment.createdAt).toLocaleTimeString()}
-                    </Text>
+                    </Text>{" "}
+                    {"\t"}
+                    {printStars(comment.rating)}
                   </Text>
                 </>
               }

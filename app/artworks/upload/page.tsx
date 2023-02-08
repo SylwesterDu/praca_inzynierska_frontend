@@ -12,6 +12,7 @@ import {
   Dropdown,
   FormElement,
   Loading,
+  Checkbox,
 } from "@nextui-org/react";
 import { Form, Formik } from "formik";
 import { createRef, Key, useEffect, useMemo, useRef, useState } from "react";
@@ -57,6 +58,7 @@ export default function Page() {
     description: "",
     genres: ["Pop"],
     tags: [],
+    adultContent: false,
   };
 
   async function beginUploadProcess() {
@@ -145,7 +147,7 @@ export default function Page() {
       values
     );
     if (response.status == 200) {
-      router.replace("account");
+      router.replace(`artworks/${uploadProcessId}`);
     }
   }
 
@@ -244,6 +246,14 @@ export default function Page() {
                           ))}
                         </Dropdown.Menu>
                       </Dropdown>
+                      <Spacer y={1} />
+                      <Checkbox
+                        onChange={(isSelected) =>
+                          setFieldValue("adultContent", isSelected)
+                        }
+                      >
+                        Treść przenaczona dla dorosłych widzów
+                      </Checkbox>
                     </Col>
                   )}
                   {currentStep == 3 && (

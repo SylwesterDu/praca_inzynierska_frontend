@@ -1,4 +1,4 @@
-import { User } from "./UserTypes";
+import { UserData } from "./UserTypes";
 
 export type Artwork = {
   id: string;
@@ -18,6 +18,7 @@ export type UploadArtwork = {
   artType: number;
   genres: string[];
   tags: string[];
+  adultContent: boolean;
 };
 
 export type UpdateArtwork = {
@@ -33,7 +34,7 @@ export type ArtworkDetails = {
   title: string;
   description: string;
   resourceUrls: string[];
-  owner: User;
+  owner: UserData;
   upvotes: number;
   downvotes: number;
   views: number;

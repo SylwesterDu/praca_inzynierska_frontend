@@ -4,8 +4,10 @@ export type Comment = {
   createdAt: Date;
   creatorName: string;
   creatorId: string;
+  rating?: number;
 };
 
 export type AddComment = {
   content: string;
+  rating?: number;
 };

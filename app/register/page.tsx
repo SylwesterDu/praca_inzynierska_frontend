@@ -7,6 +7,7 @@ import { api } from "../../axios";
 type RegisterValues = {
   email: string;
   username: string;
+  birthDate: Date;
   password: string;
   confirmPassword: string;
 };
@@ -35,6 +36,7 @@ export default function Page() {
           initialValues={{
             email: "",
             username: "",
+            birthDate: new Date(),
             password: "",
             confirmPassword: "",
           }}
@@ -64,6 +66,17 @@ export default function Page() {
                   aria-label="username"
                   onChange={(value) =>
                     setFieldValue("username", value.target.value)
+                  }
+                ></Input>
+                <Spacer y={1} />
+
+                <Input
+                  type="date"
+                  bordered
+                  placeholder="Wprowadź datę urodzenia"
+                  aria-label="birth date"
+                  onChange={(value) =>
+                    setFieldValue("birthDate", value.target.value)
                   }
                 ></Input>
                 <Spacer y={1} />

@@ -59,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       avatar: "",
       roles: [],
     });
+    localStorage.removeItem("jwt");
   };
 
   const getUserData = async () => {

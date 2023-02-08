@@ -1,9 +1,12 @@
 "use client";
 import {
   faFlag,
+  faStar as filledStar,
   faThumbsDown,
   faThumbsUp,
 } from "@fortawesome/free-solid-svg-icons";
+
+import { faStar as outlinedStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Card,
@@ -29,6 +32,7 @@ import Plyr from "plyr-react";
 import "plyr-react/plyr.css";
 
 import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "../../../AuthContext";
 
 import { api } from "../../../axios";
 import { ArtworkCard } from "../../../components/ArtworkCard";
@@ -38,12 +42,14 @@ import { Artwork, ArtworkDetails } from "../../../types/ArtworkTypes";
 
 export default function Page({ params }: any) {
   const router = useRouter();
+  const { logged } = useAuth();
   const [artworkDetails, setArtworkDetails] = useState<ArtworkDetails>();
   const [otherArtworks, setOtherArtworks] = useState<Artwork[]>([]);
+  const [rating, setRating] = useState<number>(0);
   const [showModal, setShowModal] = useState(false);
-  const [reportForOther, setReportForOther] = useState(false);
   const [reportReason, setReportReason] = useState("Zła kategoria");
   const [showCustomReportReason, setShowCustomReportReason] = useState(false);
+  const [showAdultContentModal, setShowAdultContentModal] = useState(false);
   const ratio = useMemo(() => {
     if (artworkDetails) {
       if (artworkDetails.upvotes == 0 && artworkDetails.downvotes > 0) {
@@ -64,6 +70,9 @@ export default function Page({ params }: any) {
         console.log(response.data);
         setArtworkDetails(response.data);
         return response.data.owner.id;
+      })
+      .catch((e) => {
+        setShowAdultContentModal(true);
       })
       .then((ownerId: string) => {
         getOtherArtworks(ownerId);
@@ -102,6 +111,45 @@ export default function Page({ params }: any) {
 
   return (
     <>
+      <Modal
+        closeButton
+        aria-labelledby="modal-title"
+        open={showAdultContentModal}
+        onClose={() => {
+          setShowAdultContentModal(false);
+        }}
+      >
+        <Modal.Header>
+          <Text id="modal-title" size={18}>
+            Niedozwolona treść
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Col>
+            <Text css={{ textAlign: "center" }}>
+              Dzieło, które chcesz obejrzeć, jest przeznaczone dla pełnoletnich
+              widzów.
+            </Text>
+          </Col>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            as={Link}
+            href="/"
+            css={{ width: "100%" }}
+            color="success"
+            type="submit"
+          >
+            Powrót na stronę główną
+          </Button>
+          <Button
+            css={{ width: "100%" }}
+            onPress={() => setShowAdultContentModal(false)}
+          >
+            Zamknij
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Modal
         closeButton
         aria-labelledby="modal-title"
@@ -243,6 +291,15 @@ export default function Page({ params }: any) {
                   objectFit="contain"
                 />
               )}
+              {artworkDetails?.artType == 3 && (
+                <Image
+                  src={artworkDetails.resourceUrls[0]}
+                  alt=""
+                  width="100%"
+                  height="100%"
+                  objectFit="contain"
+                />
+              )}
             </div>
           </Grid>
           <Grid md={4} sm={5} xs={12}>
@@ -250,16 +307,18 @@ export default function Page({ params }: any) {
               <Card.Header css={{ position: "relative" }}>
                 <Text h3>{artworkDetails?.title}</Text>
                 <span onClick={() => setShowModal(true)}>
-                  <FontAwesomeIcon
-                    color="grey"
-                    style={{
-                      fontSize: 16,
-                      position: "absolute",
-                      right: 10,
-                      cursor: "pointer",
-                    }}
-                    icon={faFlag}
-                  />
+                  {logged && (
+                    <FontAwesomeIcon
+                      color="grey"
+                      style={{
+                        fontSize: 16,
+                        position: "absolute",
+                        right: 10,
+                        cursor: "pointer",
+                      }}
+                      icon={faFlag}
+                    />
+                  )}
                 </span>
               </Card.Header>
               <Card.Divider />
@@ -331,9 +390,50 @@ export default function Page({ params }: any) {
                       </Text>
                     </Grid>
                   </Grid.Container>
-                  <Text size="$sm" color="grey">
-                    {artworkDetails?.views} wyświetleń.
-                  </Text>
+                  <Grid.Container>
+                    <Grid>
+                      <Text h4 color="grey" css={{ marginLeft: 20 }}>
+                        Oceny komentujących:{" "}
+                      </Text>
+                      <Container>
+                        <Row>
+                          <FontAwesomeIcon
+                            color="yellow"
+                            style={{ fontSize: 27 }}
+                            icon={rating! >= 1 ? filledStar : outlinedStar}
+                          />
+
+                          <FontAwesomeIcon
+                            color="yellow"
+                            style={{ fontSize: 27 }}
+                            icon={rating! >= 2 ? filledStar : outlinedStar}
+                          />
+                          <FontAwesomeIcon
+                            color="yellow"
+                            style={{ fontSize: 27 }}
+                            icon={rating! >= 3 ? filledStar : outlinedStar}
+                          />
+                          <FontAwesomeIcon
+                            color="yellow"
+                            style={{ fontSize: 27 }}
+                            icon={rating! >= 4 ? filledStar : outlinedStar}
+                          />
+                          <FontAwesomeIcon
+                            color="yellow"
+                            style={{ fontSize: 27 }}
+                            icon={rating! >= 5 ? filledStar : outlinedStar}
+                          />
+                          <Spacer x={1} />
+                          <Text h4>
+                            {isNaN(rating)
+                              ? "brak ocen."
+                              : rating.toPrecision(3)}
+                          </Text>
+                        </Row>
+                        <Spacer y={1} />
+                      </Container>
+                    </Grid>
+                  </Grid.Container>
                   <Button
                     ghost
                     as={Link}
@@ -363,7 +463,7 @@ export default function Page({ params }: any) {
           </Row>
         </Collapse>
         <Spacer y={1} />
-        <Comments artworkId={params.id} />
+        {logged && <Comments artworkId={params.id} setRating={setRating} />}
         <Spacer y={2} />
       </Container>
     </>
