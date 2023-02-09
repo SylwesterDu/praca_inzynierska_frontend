@@ -21,7 +21,7 @@ export default function TextArtwork(data: ArtworkDetails) {
       style={{ height: 500, overflowY: "scroll", overflowX: "hidden" }}
       className="PdfDiv"
     >
-      <Document file={data.resourceUrls[0]}>
+      <Document file={data.resources[0].url}>
         <Page
           width={
             document.getElementsByClassName("PdfDiv")[0]?.clientWidth ?? 150

@@ -33,7 +33,7 @@ export type ArtworkDetails = {
   id: string;
   title: string;
   description: string;
-  resourceUrls: string[];
+  resources: Resource[];
   owner: UserData;
   upvotes: number;
   downvotes: number;
@@ -41,4 +41,9 @@ export type ArtworkDetails = {
   artType: number;
   genres: string[];
   tags: string[];
+};
+
+export type Resource = {
+  url: string;
+  contentType: string;
 };

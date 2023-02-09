@@ -297,7 +297,7 @@ export function Stats() {
         <Grid xs={12} md={6}>
           <Card>
             <Card.Header>
-              <Text h3> Procentowy udział komentarzy</Text>
+              <Text h3> Procentowy udział recenzji</Text>
             </Card.Header>
             <Card.Body>
               <Row align="center">
@@ -313,29 +313,31 @@ export function Stats() {
                       fill="#8884d8"
                       dataKey="count"
                     >
-                      {stats.artworksCommentsCount.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
+                      {stats.artworksCommentsCount &&
+                        stats.artworksCommentsCount.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS[index % COLORS.length]}
+                          />
+                        ))}
                     </Pie>
                   </PieChart>
                 </ResponsiveContainer>
                 <Col>
                   <Grid.Container gap={0.5}>
-                    {stats.artworksCommentsCount.map((count, index) => (
-                      <Grid key={index} xs={12} alignItems="center">
-                        <Badge
-                          variant="dot"
-                          css={{ backgroundColor: COLORS[index] }}
-                        />
-                        <Text css={{ ml: "$2" }}>
-                          {artTypeToName(count.artType)} (
-                          {stats.artworksCommentsCount[index].count})
-                        </Text>
-                      </Grid>
-                    ))}
+                    {stats.artworksCommentsCount &&
+                      stats.artworksCommentsCount.map((count, index) => (
+                        <Grid key={index} xs={12} alignItems="center">
+                          <Badge
+                            variant="dot"
+                            css={{ backgroundColor: COLORS[index] }}
+                          />
+                          <Text css={{ ml: "$2" }}>
+                            {artTypeToName(count.artType)} (
+                            {stats.artworksCommentsCount[index].count})
+                          </Text>
+                        </Grid>
+                      ))}
                   </Grid.Container>
                 </Col>
               </Row>

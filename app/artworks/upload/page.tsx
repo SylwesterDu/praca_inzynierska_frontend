@@ -48,7 +48,13 @@ export default function Page() {
       ],
       1: ["Wiersz", "Powieść", "Komiks", "Teksty piosenek", "Inne"],
       2: ["Fotografia cyfrowa", "Grafika komputerowa", "Malarstwo", "Inne"],
-      3: ["Modelarstwo", "Żeźbiarstwo", "Wzory drukarek 3D", "Origami", "Inne"],
+      3: [
+        "Modelarstwo",
+        "Rzeźbiarstwo",
+        "Wzory drukarek 3D",
+        "Origami",
+        "Inne",
+      ],
     };
   }, []);
 
@@ -313,6 +319,7 @@ export default function Page() {
                         aria-label="input file"
                         type="file"
                         accept={acceptFiles}
+                        multiple
                         hidden
                         ref={fileButton}
                         onChange={(e) => addFile(e)}

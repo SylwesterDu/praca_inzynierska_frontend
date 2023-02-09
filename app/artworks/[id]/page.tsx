@@ -39,6 +39,7 @@ import { ArtworkCard } from "../../../components/ArtworkCard";
 import { Comments } from "../../../components/Comments";
 import TextArtwork from "../../../components/TextArtwork";
 import { Artwork, ArtworkDetails } from "../../../types/ArtworkTypes";
+import { Gallery } from "../../../components/Gallery";
 
 export default function Page({ params }: any) {
   const router = useRouter();
@@ -275,30 +276,16 @@ export default function Page({ params }: any) {
                 <Plyr
                   source={{
                     type: "video",
-                    sources: [{ src: artworkDetails?.resourceUrls[0] }],
+                    sources: [{ src: artworkDetails?.resources[0].url }],
                   }}
                 ></Plyr>
               )}
               {artworkDetails?.artType == 1 && (
                 <TextArtwork {...artworkDetails} />
               )}
-              {artworkDetails?.artType == 2 && (
-                <Image
-                  src={artworkDetails.resourceUrls[0]}
-                  alt=""
-                  width="100%"
-                  height="100%"
-                  objectFit="contain"
-                />
-              )}
-              {artworkDetails?.artType == 3 && (
-                <Image
-                  src={artworkDetails.resourceUrls[0]}
-                  alt=""
-                  width="100%"
-                  height="100%"
-                  objectFit="contain"
-                />
+              {(artworkDetails?.artType == 2 ||
+                artworkDetails?.artType == 3) && (
+                <Gallery resources={artworkDetails.resources} />
               )}
             </div>
           </Grid>
@@ -393,7 +380,7 @@ export default function Page({ params }: any) {
                   <Grid.Container>
                     <Grid>
                       <Text h4 color="grey" css={{ marginLeft: 20 }}>
-                        Oceny komentujących:{" "}
+                        Oceny recenzentów:{" "}
                       </Text>
                       <Container>
                         <Row>
@@ -430,7 +417,7 @@ export default function Page({ params }: any) {
                               : rating.toPrecision(3)}
                           </Text>
                         </Row>
-                        <Spacer y={1} />
+                        <Spacer y={0.5} />
                       </Container>
                     </Grid>
                   </Grid.Container>

@@ -82,7 +82,7 @@ export function Comments({
   }
 
   return (
-    <Collapse title="Komentarze" shadow expanded={expanded}>
+    <Collapse title="Recenzje" shadow expanded={expanded}>
       {userData && (
         <>
           <Spacer y={0.5} />
@@ -96,7 +96,7 @@ export function Comments({
                     color="secondary"
                     fullWidth
                     size="md"
-                    placeholder="Dodaj komentarz"
+                    placeholder="Dodaj recenzję"
                     value={values.content}
                     onChange={(e) => {
                       setFieldValue("content", e.currentTarget.value);
