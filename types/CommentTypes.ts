@@ -3,6 +3,7 @@ export type Comment = {
   content: string;
   createdAt: Date;
   creatorName: string;
+  creatorAvatar: string;
   creatorId: string;
   rating?: number;
 };

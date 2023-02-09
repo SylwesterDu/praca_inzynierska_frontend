@@ -5,8 +5,10 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async (config) => {
-  let token = localStorage.jwt ?? "";
-  config.headers!.Authorization = `Bearer ${token}`;
+  let token = localStorage.getItem("jwt");
+  if (token != null) {
+    config.headers!.Authorization = `Bearer ${token}`;
+  }
 
   return config;
 });

@@ -31,6 +31,7 @@ export function Comments({
   artworkId: string;
   setRating: any;
 }) {
+  const { logged } = useAuth();
   const [comments, setComments] = useState<Comment[]>([]);
   const [comment, setComment] = useState("");
   const [rate, setRate] = useState(0);
@@ -83,7 +84,7 @@ export function Comments({
 
   return (
     <Collapse title="Recenzje" shadow expanded={expanded}>
-      {userData && (
+      {logged && (
         <>
           <Spacer y={0.5} />
           <Container>
@@ -103,7 +104,7 @@ export function Comments({
                       setComment(e.currentTarget.value);
                     }}
                   />
-                  <Spacer y={0.2} />
+                  <Spacer y={0.5} />
                   <Row align="flex-end" justify="flex-end">
                     <Row>
                       <span
@@ -183,6 +184,7 @@ export function Comments({
         {comments.map((comment, index) => (
           <Container key={index} css={{ margin: "10px 0" }}>
             <User
+              src={comment.creatorAvatar}
               name={
                 <>
                   <Text h5 span>

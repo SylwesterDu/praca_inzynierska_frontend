@@ -450,7 +450,7 @@ export default function Page({ params }: any) {
           </Row>
         </Collapse>
         <Spacer y={1} />
-        {logged && <Comments artworkId={params.id} setRating={setRating} />}
+        {<Comments artworkId={params.id} setRating={setRating} />}
         <Spacer y={2} />
       </Container>
     </>

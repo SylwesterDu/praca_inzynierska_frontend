@@ -56,7 +56,7 @@ export function Gallery({ resources }: { resources: Resource[] }) {
               <Image
                 src={resource.url}
                 alt=""
-                width={150}
+                width={160}
                 containerCss={{ padding: "0 5px", margin: 0 }}
                 css={{ padding: 0, margin: 0 }}
                 height="100%"
